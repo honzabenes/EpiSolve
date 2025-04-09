@@ -10,13 +10,11 @@ namespace Epidemy_Evolution_Optimalizer
     {
         public uint X { get; set; }
         public uint Y { get; set; }
-        public TileState State { get; set; }
 
         public GridPosition(uint x, uint y, TileState state)
         {
             this.X = x;
             this.Y = y;
-            State = state;
         }
 
         private bool Equals(GridPosition other)
