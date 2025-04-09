@@ -9,9 +9,9 @@ namespace Epidemy_Evolution_Optimalizer
     class Agent
     {
         public SIR Status { get; set; }
-        public ushort Age { get; set; }
+        public AgentAge Age { get; set; }
 
-        public Agent(SIR status, ushort age)
+        public Agent(SIR status, AgentAge age)
         {
             this.Status = status;
             this.Age = age;
