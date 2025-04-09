@@ -23,5 +23,34 @@ namespace Epidemy_Evolution_Optimalizer
         {
             return $"Status: {Status}, Age: {Age}";
         }
+
+        public void Move(GridMap gridMap)
+        {
+            int newX;
+            int newY;
+            List<GridPosition> possibleMoves = new List<GridPosition>();
+            int[] moves = { -1, 1 };
+
+            foreach (int move in moves)
+            {
+                newX = this.Position.X + move;
+                newY = this.Position.Y + move;
+
+                if (gridMap.isValidPosition(newX, this.Position.Y))
+                {
+                    possibleMoves.Append(new GridPosition(newX, this.Position.Y));
+                }
+
+                if (gridMap.isValidPosition(this.Position.X, newY))
+                {
+                    possibleMoves.Append(new GridPosition(this.Position.X, newY));
+                }
+            }
+
+            Random random = new Random();
+            int randomIndex = random.Next(possibleMoves.Count);
+
+            this.Position = possibleMoves[randomIndex];
+        }
     }
 }
