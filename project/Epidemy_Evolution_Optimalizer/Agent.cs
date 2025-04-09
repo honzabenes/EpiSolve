@@ -24,7 +24,7 @@ namespace Epidemy_Evolution_Optimalizer
             return $"Status: {Status}, Age: {Age}";
         }
 
-        public void Move(GridMap gridMap)
+        public void Move(GridMap gridMap, Random random)
         {
             int newX;
             int newY;
@@ -45,9 +45,7 @@ namespace Epidemy_Evolution_Optimalizer
                 }
             } 
 
-            Random random = new Random();
             int randomIndex = random.Next(possibleMoves.Count);
-
             this.Position = possibleMoves[randomIndex];
         }
     }
