@@ -10,6 +10,7 @@ namespace Epidemy_Evolution_Optimalizer
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Hello world");
         }
     }
 }

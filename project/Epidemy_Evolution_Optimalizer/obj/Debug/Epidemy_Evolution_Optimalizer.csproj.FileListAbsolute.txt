@@ -1,0 +1,7 @@
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\bin\Debug\Epidemy_Evolution_Optimalizer.exe.config
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\bin\Debug\Epidemy_Evolution_Optimalizer.exe
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\bin\Debug\Epidemy_Evolution_Optimalizer.pdb
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\obj\Debug\Epidemy_Evolution_Optimalizer.csproj.AssemblyReference.cache
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\obj\Debug\Epidemy_Evolution_Optimalizer.csproj.CoreCompileInputs.cache
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\obj\Debug\Epidemy_Evolution_Optimalizer.exe
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\Epidemy_Evolution_Optimalizer\obj\Debug\Epidemy_Evolution_Optimalizer.pdb
