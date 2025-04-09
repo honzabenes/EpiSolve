@@ -8,10 +8,10 @@ namespace Epidemy_Evolution_Optimalizer
 {
     class GridPosition
     {
-        public uint X { get; set; }
-        public uint Y { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        public GridPosition(uint x, uint y, TileState state)
+        public GridPosition(int x, int y)
         {
             this.X = x;
             this.Y = y;

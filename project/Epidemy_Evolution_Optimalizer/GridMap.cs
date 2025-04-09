@@ -8,11 +8,11 @@ namespace Epidemy_Evolution_Optimalizer
 {
     class GridMap
     {
-        public uint Height { get; set; }
-        public uint Width { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public TileState[,] Tiles { get; set; }
 
-        public GridMap(uint height, uint width)
+        public GridMap(int height, int width)
         {
             this.Height = height;
             this.Width = width;
@@ -26,7 +26,7 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
-        public bool isValidPosition(uint x, uint y)
+        public bool isValidPosition(int x, int y)
         {
             return (x >= 0 && y >= 0 && x < this.Width && y < this.Height);
         }
@@ -36,7 +36,7 @@ namespace Epidemy_Evolution_Optimalizer
             return isValidPosition(position.X, position.Y);
         }
 
-        public TileState GetTileState(uint x, uint y)
+        public TileState GetTileState(int x, int y)
         {
             return Tiles[x, y];
         }
