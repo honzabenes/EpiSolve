@@ -29,23 +29,21 @@ namespace Epidemy_Evolution_Optimalizer
             int newX;
             int newY;
             List<GridPosition> possibleMoves = new List<GridPosition>();
-            int[] moves = { -1, 1 };
+            int[] moves = { -1, 0, 1 };
 
-            foreach (int move in moves)
+            foreach (int x in moves)
             {
-                newX = this.Position.X + move;
-                newY = this.Position.Y + move;
-
-                if (gridMap.isValidPosition(newX, this.Position.Y))
+                foreach (int y in moves)
                 {
-                    possibleMoves.Append(new GridPosition(newX, this.Position.Y));
-                }
+                    newX = this.Position.X + x;
+                    newY = this.Position.Y + y;
 
-                if (gridMap.isValidPosition(this.Position.X, newY))
-                {
-                    possibleMoves.Append(new GridPosition(this.Position.X, newY));
+                    if (gridMap.isValidPosition(newX, newY))
+                    {
+                        possibleMoves.Append(new GridPosition(newX, newY));
+                    }
                 }
-            }
+            } 
 
             Random random = new Random();
             int randomIndex = random.Next(possibleMoves.Count);
