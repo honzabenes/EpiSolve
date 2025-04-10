@@ -33,9 +33,10 @@ namespace Epidemy_Evolution_Optimalizer
                     newX = this.Position.X + x;
                     newY = this.Position.Y + y;
 
-                    if (gridMap.isValidPosition(newX, newY))
+                    if (gridMap.isValidPosition(newY, newX))
                     {
-                        possibleMoves.Append(new GridPosition(newX, newY));
+                        GridPosition newPosition = new GridPosition(newY, newX);
+                        possibleMoves.Add(newPosition);
                     }
                 }
             } 
@@ -44,16 +45,19 @@ namespace Epidemy_Evolution_Optimalizer
             this.Position = possibleMoves[randomIndex];
         }
 
-        public void TryInfect(GridMap grid, double infectionTransmissionRate, Random random)
+        public bool TryInfect(GridMap grid, double infectionTransmissionRate, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
 
-            if (grid.Tiles[x, y] == TileState.HighRisk && 
+            if (grid.Tiles[y, x] == TileState.HighRisk && 
                 random.NextDouble() < infectionTransmissionRate)
             {
-                this.Status = SIR.Infected; 
+                this.Status = SIR.Infected;
+                return true;
             }
+
+            return false;
         }
 
         public override string ToString()

@@ -8,13 +8,13 @@ namespace Epidemy_Evolution_Optimalizer
 {
     class GridPosition
     {
-        public int X { get; set; }
         public int Y { get; set; }
+        public int X { get; set; }
 
-        public GridPosition(int x, int y)
+        public GridPosition(int y, int x)
         {
-            this.X = x;
             this.Y = y;
+            this.X = x;
         }
 
         private bool Equals(GridPosition other)

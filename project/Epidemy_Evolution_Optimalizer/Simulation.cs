@@ -12,18 +12,18 @@ namespace Epidemy_Evolution_Optimalizer
         {
             Agent[] agents = new Agent[agentsCount];
             Random random = new Random();
+            bool isSomeoneInfected = false;
 
             for (int i = 0; i < agentsCount; i++)
             {
                 int randomX = random.Next(grid.Width);
                 int randomY = random.Next(grid.Height);
-                GridPosition position = new GridPosition(randomX, randomY);
+                GridPosition position = new GridPosition(randomY, randomX);
 
                 AgentAge[] ages = Enum.GetValues(typeof(AgentAge)).Cast<AgentAge>().ToArray();
                 int randomAgeIndex = random.Next(ages.Length);
                 AgentAge age = ages[randomAgeIndex];
 
-                bool isSomeoneInfected = false;
                 SIR status;
                 if (!isSomeoneInfected)
                 {
@@ -48,7 +48,7 @@ namespace Epidemy_Evolution_Optimalizer
 
             if (agent.Status == SIR.Infected)
             {
-                grid.Tiles[x, y] = TileState.HighRisk;
+                grid.Tiles[y, x] = TileState.HighRisk;
             }
         }
 
@@ -57,7 +57,7 @@ namespace Epidemy_Evolution_Optimalizer
             int x = agent.Position.X;
             int y = agent.Position.Y;
 
-            grid.Tiles[x, y] = TileState.Safe;
+            grid.Tiles[y, x] = TileState.Safe;
         }
 
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, double infectionTransmissionProbabiltiy)
@@ -82,6 +82,7 @@ namespace Epidemy_Evolution_Optimalizer
                         maxInfected++;
                     }
                 }
+                grid.PrintGrid();
             }
             
             return maxInfected;
