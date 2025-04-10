@@ -15,8 +15,8 @@ namespace Epidemy_Evolution_Optimalizer
         public Agent(SIR status, AgentAge age, GridPosition position)
         {
             this.Status = status;
-            this.Age = age;
-            Position = position;
+            this.Age = age; 
+            this.Position = position;
         }
 
         public override string ToString()
