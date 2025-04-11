@@ -13,7 +13,7 @@ namespace Epidemy_Evolution_Optimalizer
         {
             GridMap grid = new GridMap(10, 20);
             int agentsCount = 5;
-            int simulationTime = 100;
+            int simulationTime = 300;
             double infectionTransmissionProbability = 0.8;
 
             Simulation.Simulate(grid, agentsCount, simulationTime, infectionTransmissionProbability);

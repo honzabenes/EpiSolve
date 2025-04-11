@@ -45,7 +45,26 @@ namespace Epidemy_Evolution_Optimalizer
             this.Position = possibleMoves[randomIndex];
         }
 
-        public bool TryInfect(GridMap grid, double infectionTransmissionRate, Random random)
+        public void SetGridTileStatus(GridMap grid)
+        {
+            int x = this.Position.X;
+            int y = this.Position.Y;
+
+            if (this.Status == SIR.Infected)
+            {
+                grid.Tiles[y, x] = TileState.HighRisk;
+            }
+        }
+
+        public void CloseGridTileStatus(GridMap grid)
+        {
+            int x = this.Position.X;
+            int y = this.Position.Y;
+
+            grid.Tiles[y, x] = TileState.Safe;
+        }
+
+        public void TryInfect(GridMap grid, double infectionTransmissionRate, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
@@ -54,10 +73,7 @@ namespace Epidemy_Evolution_Optimalizer
                 random.NextDouble() < infectionTransmissionRate)
             {
                 this.Status = SIR.Infected;
-                return true;
             }
-
-            return false;
         }
 
         public override string ToString()

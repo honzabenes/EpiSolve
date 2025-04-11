@@ -41,25 +41,6 @@ namespace Epidemy_Evolution_Optimalizer
             return agents;
         }
 
-        private static void SetGridTileStatus(GridMap grid, Agent agent)
-        {
-            int x = agent.Position.X;
-            int y = agent.Position.Y;
-
-            if (agent.Status == SIR.Infected)
-            {
-                grid.Tiles[y, x] = TileState.HighRisk;
-            }
-        }
-
-        private static void CloseGridTileStatus(GridMap grid, Agent agent)
-        {
-            int x = agent.Position.X;
-            int y = agent.Position.Y;
-
-            grid.Tiles[y, x] = TileState.Safe;
-        }
-
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, double infectionTransmissionProbabiltiy)
         {
             Random random = new Random();
@@ -68,20 +49,26 @@ namespace Epidemy_Evolution_Optimalizer
             
             for (int i = 0; i < simulationTime; i++)
             {
+                maxInfected = 0;
+
                 foreach (Agent agent in agents)
                 {
-                    CloseGridTileStatus(grid, agent);
+                    agent.CloseGridTileStatus(grid);
                     agent.Move(grid, random);
-                    SetGridTileStatus(grid, agent);
+                    agent.SetGridTileStatus(grid);
                 }
                 foreach (Agent agent in agents)
                 {
-                    bool isInfected = agent.TryInfect(grid, infectionTransmissionProbabiltiy, random);
-                    if (isInfected)
+                    if (agent.Status == SIR.Susceptible) {
+                        agent.TryInfect(grid, infectionTransmissionProbabiltiy, random);
+                    }
+                    if (agent.Status == SIR.Infected)
                     {
                         maxInfected++;
                     }
                 }
+                Console.WriteLine($"Time: {i + 1}");
+                Console.WriteLine($"Infected: {maxInfected}\n");
                 grid.PrintGrid();
             }
             
