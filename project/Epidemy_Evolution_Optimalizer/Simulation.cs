@@ -41,7 +41,7 @@ namespace Epidemy_Evolution_Optimalizer
             return agents;
         }
 
-        public static int Simulate(GridMap grid, int agentsCount, int simulationTime, double infectionTransmissionRate)
+        public static int Simulate(GridMap grid, int agentsCount, int simulationTime, TransmissionRates transmissionRates)
         {
             Random random = new Random();
             int maxInfected = 0;
@@ -54,20 +54,24 @@ namespace Epidemy_Evolution_Optimalizer
                 foreach (Agent agent in agents)
                 {
                     agent.CloseGridTileStatus(grid);
+                }
+                foreach (Agent agent in agents)
+                {
                     agent.Move(grid, random);
                     agent.SetGridTileStatus(grid);
-                    Console.WriteLine(agent.Position.ToString());
                 }
                 foreach (Agent agent in agents)
                 {
                     if (agent.Status == SIR.Susceptible) {
-                        agent.TryInfect(grid, infectionTransmissionRate, random);
+                        agent.TryInfect(grid, transmissionRates, random);
                     }
                     if (agent.Status == SIR.Infected)
                     {
                         maxInfected++;
                     }
+                    Console.WriteLine(agent.Position.ToString()); // CONTROL PRINT
                 }
+                // CONTROL PRINTS
                 Console.WriteLine($"Time: {i + 1}");
                 Console.WriteLine($"Infected: {maxInfected}\n");
                 grid.PrintGrid();

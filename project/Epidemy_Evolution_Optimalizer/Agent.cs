@@ -19,7 +19,7 @@ namespace Epidemy_Evolution_Optimalizer
             this.Position = position;
         }
 
-        public void Move(GridMap gridMap, Random random)
+        public List<GridPosition> GetPossibleMoves(GridMap grid)
         {
             int newX;
             int newY;
@@ -33,13 +33,20 @@ namespace Epidemy_Evolution_Optimalizer
                     newX = this.Position.X + x;
                     newY = this.Position.Y + y;
 
-                    if (gridMap.isValidPosition(newY, newX))
+                    if (grid.isValidPosition(newY, newX))
                     {
                         GridPosition newPosition = new GridPosition(newY, newX);
                         possibleMoves.Add(newPosition);
                     }
                 }
-            } 
+            }
+
+            return possibleMoves;
+        }
+
+        public void Move(GridMap grid, Random random)
+        {
+            List<GridPosition> possibleMoves = GetPossibleMoves(grid);
 
             int randomIndex = random.Next(possibleMoves.Count);
             this.Position = possibleMoves[randomIndex];
@@ -52,27 +59,58 @@ namespace Epidemy_Evolution_Optimalizer
 
             if (this.Status == SIR.Infected)
             {
+                List<GridPosition> infectionRadius = GetPossibleMoves(grid);
+                foreach (GridPosition tile in infectionRadius)
+                {
+                    if (grid.Tiles[tile.Y, tile.X] == TileState.Safe)
+                    {
+                        grid.Tiles[tile.Y, tile.X] = TileState.ModerateRisk;
+                    }
+                }
                 grid.Tiles[y, x] = TileState.HighRisk;
             }
         }
 
         public void CloseGridTileStatus(GridMap grid)
         {
-            int x = this.Position.X;
-            int y = this.Position.Y;
+            List<GridPosition> infectionRadius = GetPossibleMoves(grid);
 
-            grid.Tiles[y, x] = TileState.Safe;
+            foreach(GridPosition tile in infectionRadius)
+            {
+                grid.Tiles[tile.Y, tile.X] = TileState.Safe;
+            }
         }
 
-        public void TryInfect(GridMap grid, double infectionTransmissionRate, Random random)
+        public void TryInfect(GridMap grid, TransmissionRates transmissionRates, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
+            double randomDouble = random.NextDouble();
 
-            if (grid.Tiles[y, x] == TileState.HighRisk && 
-                random.NextDouble() < infectionTransmissionRate)
+            switch(grid.Tiles[y, x])
             {
-                this.Status = SIR.Infected;
+                case TileState.Safe:
+                    if (randomDouble < transmissionRates.Safe)
+                    {
+                        this.Status = SIR.Infected;
+                    }
+                    break;
+
+                case TileState.ModerateRisk:
+                    if (randomDouble < transmissionRates.ModerateRisk)
+                    {
+                        this.Status = SIR.Infected;
+                        Console.WriteLine("Danger");
+                    }
+                    break;
+
+                case TileState.HighRisk:
+                    if (randomDouble < transmissionRates.HighRisk)
+                    {
+                        this.Status = SIR.Infected;
+                        Console.WriteLine("Danger");
+                    }
+                    break;
             }
         }
 

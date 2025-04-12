@@ -49,8 +49,6 @@ namespace Epidemy_Evolution_Optimalizer
 
         public void PrintGrid()
         {
-            StringBuilder sb = new StringBuilder();
-
             for (int y = 0; y < this.Height; y++)
             {
                 for (int x = 0; x < this.Width; x++)
@@ -58,17 +56,23 @@ namespace Epidemy_Evolution_Optimalizer
                     switch (this.Tiles[y, x])
                     {
                         case TileState.Safe:
-                            sb.Append('-');
+                            Console.Write('-');
+                            break;
+
+                        case TileState.ModerateRisk:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write('x');
                             break;
 
                         case TileState.HighRisk:
-                            sb.Append('R');
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write('x');
                             break;
                     }
+                    Console.ResetColor();
                 }
-                sb.AppendLine();
+                Console.WriteLine();
             }
-            Console.WriteLine(sb.ToString());
         }
     }
 }
