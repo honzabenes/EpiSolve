@@ -12,11 +12,11 @@ namespace Epidemy_Evolution_Optimalizer
         static void Main(string[] args)
         {
             GridMap grid = new GridMap(10, 20);
-            int agentsCount = 5;
+            int agentsCount = 10;
             int simulationTime = 300;
-            double infectionTransmissionProbability = 0.8;
+            double infectionTransmissionRate = 1;
 
-            Simulation.Simulate(grid, agentsCount, simulationTime, infectionTransmissionProbability);
+            Simulation.Simulate(grid, agentsCount, simulationTime, infectionTransmissionRate);
         }
     }
 }

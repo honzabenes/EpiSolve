@@ -78,7 +78,7 @@ namespace Epidemy_Evolution_Optimalizer
 
         public override string ToString()
         {
-            return $"Status: {Status}, Age: {Age}";
+            return $"Status: {Status}, Age: {Age}, Position {this.Position.ToString()}";
         }
     }
 }
