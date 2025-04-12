@@ -69,12 +69,11 @@ namespace Epidemy_Evolution_Optimalizer
                     {
                         maxInfected++;
                     }
-                    Console.WriteLine(agent.Position.ToString()); // CONTROL PRINT
                 }
                 // CONTROL PRINTS
                 Console.WriteLine($"Time: {i + 1}");
                 Console.WriteLine($"Infected: {maxInfected}\n");
-                grid.PrintGrid();
+                grid.PrintGrid(agents);
             }
             
             return maxInfected;

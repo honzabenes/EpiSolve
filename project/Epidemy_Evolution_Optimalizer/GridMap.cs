@@ -47,16 +47,29 @@ namespace Epidemy_Evolution_Optimalizer
             return GetTileState(position.Y, position.X);
         }
 
-        public void PrintGrid()
+        public void PrintGrid(Agent[] agents)
         {
             for (int y = 0; y < this.Height; y++)
             {
                 for (int x = 0; x < this.Width; x++)
                 {
+                    GridPosition position = new GridPosition(y, x);
+                    bool isAgentHere = false;
+
                     switch (this.Tiles[y, x])
                     {
                         case TileState.Safe:
-                            Console.Write('-');
+
+                            foreach (Agent agent in agents)
+                            {
+                                if (agent.Position == position)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write('x');
+                                    isAgentHere = true;
+                                }
+                            }
+                            if (!isAgentHere) { Console.Write('-'); }
                             break;
 
                         case TileState.ModerateRisk:
