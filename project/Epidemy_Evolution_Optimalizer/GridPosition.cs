@@ -11,26 +11,31 @@ namespace Epidemy_Evolution_Optimalizer
         public int Y { get; set; }
         public int X { get; set; }
 
+
         public GridPosition(int y, int x)
         {
             this.Y = y;
             this.X = x;
         }
 
+
         private bool Equals(GridPosition other)
         {
             return (this.X == other.X && this.Y == other.Y);
         }
+
 
         public static bool operator == (GridPosition left, GridPosition right)
         {
             return left.Equals(right);
         }
 
+
         public static bool operator != (GridPosition left, GridPosition right)
         {
             return !(left.Equals(right));
         }
+
 
         public override string ToString()
         {
