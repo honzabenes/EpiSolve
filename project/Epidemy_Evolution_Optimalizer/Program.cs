@@ -25,6 +25,7 @@ namespace Epidemy_Evolution_Optimalizer
     {
         static void Main(string[] args)
         {
+            // configurable values
             GridMap grid = new GridMap(10, 20);
             int agentsCount = 10;
             int simulationTime = 300;
@@ -39,10 +40,15 @@ namespace Epidemy_Evolution_Optimalizer
             int minImunityTime = 5;
             double imunityLoseRate = 0.8;
 
+            double childFactor = 0.85; // the lower the less imune
+            double elderFactor = 0.85; // the lowe the less imune
+            //
+
             Simulation.Simulate(grid, agentsCount, simulationTime, 
                                 transmissionRates, 
                                 minRecoveryTime, recoveryRate,
-                                minImunityTime, imunityLoseRate);
+                                minImunityTime, imunityLoseRate,
+                                childFactor, elderFactor);
         }
     }
 }

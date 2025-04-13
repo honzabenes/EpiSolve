@@ -101,11 +101,18 @@ namespace Epidemy_Evolution_Optimalizer
             this.TimeRecovered = time;
         }
 
-        public void TryInfect(GridMap grid, int time, TransmissionRates transmissionRates, Random random)
+        public void TryInfect(GridMap grid, int time, TransmissionRates transmissionRates, 
+                              double childFactor, double elderFactor, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
             double randomDouble = random.NextDouble();
+
+            switch (this.Age)
+            {
+                case AgentAge.Child: randomDouble *= childFactor; break;
+                case AgentAge.Elderly: randomDouble *= elderFactor; break;
+            }
 
             switch(grid.Tiles[y, x])
             {

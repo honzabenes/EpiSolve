@@ -45,7 +45,8 @@ namespace Epidemy_Evolution_Optimalizer
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
                                    TransmissionRates transmissionRates, 
                                    int minRecoveryTime, double recoveryRate,
-                                   int minImunityTime, double imunityLoseRate)
+                                   int minImunityTime, double imunityLoseRate,
+                                   double childFactor, double elderFactor)
         {
             Random random = new Random();
             int maxInfected = 0;
@@ -71,7 +72,7 @@ namespace Epidemy_Evolution_Optimalizer
                 foreach (Agent agent in agents)
                 {
                     if (agent.Status == SIR.Susceptible) {
-                        agent.TryInfect(grid, time, transmissionRates, random);
+                        agent.TryInfect(grid, time, transmissionRates, childFactor, elderFactor, random);
                     }
                     if (agent.Status == SIR.Infected)
                     {
