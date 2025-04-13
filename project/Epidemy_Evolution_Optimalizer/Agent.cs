@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,13 +10,18 @@ namespace Epidemy_Evolution_Optimalizer
 {
     class Agent
     {
-        public GridPosition Position { get; set; }
         public SIR Status { get; set; }
+        public int TimeInfected { get; set; }
+        public int TimeRecovered { get; set; }
         public AgentAge Age { get; set; }
+        public GridPosition Position { get; set; }
+
 
         public Agent(SIR status, AgentAge age, GridPosition position)
         {
             this.Status = status;
+            this.TimeInfected = 0;
+            this.TimeRecovered = 0;
             this.Age = age; 
             this.Position = position;
         }
@@ -100,7 +107,6 @@ namespace Epidemy_Evolution_Optimalizer
                     if (randomDouble < transmissionRates.ModerateRisk)
                     {
                         this.Status = SIR.Infected;
-                        Console.WriteLine("Danger");
                     }
                     break;
 
@@ -108,9 +114,21 @@ namespace Epidemy_Evolution_Optimalizer
                     if (randomDouble < transmissionRates.HighRisk)
                     {
                         this.Status = SIR.Infected;
-                        Console.WriteLine("Danger");
                     }
                     break;
+            }
+        }
+
+        public void TryRecover(int minRecoveryTime, int time, double recoveryRate, Random random)
+        {
+            int delta = time - minRecoveryTime;
+
+            if (this.Status == SIR.Infected && delta > minRecoveryTime)
+            {
+                if (recoveryRate < random.NextDouble())
+                {
+                    this.Status = SIR.Recovered;
+                }
             }
         }
 

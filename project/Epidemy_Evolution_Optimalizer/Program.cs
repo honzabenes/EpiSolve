@@ -29,12 +29,17 @@ namespace Epidemy_Evolution_Optimalizer
             int agentsCount = 10;
             int simulationTime = 100;
 
-            double safeRate = 0.0;
+            double safeRate = 0.001;
             double moderateRiskRate = 0.3;
             double highRiskRate = 0.8;
             TransmissionRates transmissionRates = new TransmissionRates(safeRate, moderateRiskRate, highRiskRate);
 
-            Simulation.Simulate(grid, agentsCount, simulationTime, transmissionRates);
+            int minRecoveryTime = 20;
+            double recoveryRate = 0.8;
+
+            Simulation.Simulate(grid, agentsCount, simulationTime, 
+                                transmissionRates, minRecoveryTime,
+                                recoveryRate);
         }
     }
 }

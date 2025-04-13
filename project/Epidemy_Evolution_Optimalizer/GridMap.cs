@@ -62,7 +62,7 @@ namespace Epidemy_Evolution_Optimalizer
 
                             foreach (Agent agent in agents)
                             {
-                                if (agent.Position == position)
+                                if (agent.Position == position && !isAgentHere)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.Write('x');

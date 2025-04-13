@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Epidemy_Evolution_Optimalizer
@@ -41,13 +42,15 @@ namespace Epidemy_Evolution_Optimalizer
             return agents;
         }
 
-        public static int Simulate(GridMap grid, int agentsCount, int simulationTime, TransmissionRates transmissionRates)
+        public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
+                                   TransmissionRates transmissionRates, int minRecoveryTime,
+                                   double recoveryRate)
         {
             Random random = new Random();
             int maxInfected = 0;
             Agent[] agents = InitAgents(grid, agentsCount);
             
-            for (int i = 0; i < simulationTime; i++)
+            for (int time = 1; time < simulationTime + 1; time++)
             {
                 maxInfected = 0;
 
@@ -57,6 +60,7 @@ namespace Epidemy_Evolution_Optimalizer
                 }
                 foreach (Agent agent in agents)
                 {
+                    agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
                     agent.Move(grid, random);
                     agent.SetGridTileStatus(grid);
                 }
@@ -71,11 +75,15 @@ namespace Epidemy_Evolution_Optimalizer
                     }
                 }
                 // CONTROL PRINTS
-                Console.WriteLine($"Time: {i + 1}");
+                //Console.Clear();
+
+                Console.WriteLine($"Time: {time}");
                 Console.WriteLine($"Infected: {maxInfected}\n");
                 grid.PrintGrid(agents);
+
+                //Thread.Sleep(100);
             }
-            
+
             return maxInfected;
         }
     }
