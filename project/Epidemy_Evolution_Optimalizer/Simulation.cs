@@ -49,11 +49,12 @@ namespace Epidemy_Evolution_Optimalizer
         {
             Random random = new Random();
             int maxInfected = 0;
+            int currInfected = 0;
             Agent[] agents = InitAgents(grid, agentsCount);
             
             for (int time = 1; time < simulationTime + 1; time++)
             {
-                maxInfected = 0;
+                currInfected = 0;
 
                 foreach (Agent agent in agents)
                 {
@@ -74,14 +75,18 @@ namespace Epidemy_Evolution_Optimalizer
                     }
                     if (agent.Status == SIR.Infected)
                     {
-                        maxInfected++;
+                        currInfected++;
                     }
                 }
+
+                if (currInfected > maxInfected) { maxInfected = currInfected; }
+
                 // CONTROL PRINTS
                 Console.Clear();
 
                 Console.WriteLine($"Time: {time}");
-                Console.WriteLine($"Infected: {maxInfected}\n");
+                Console.WriteLine($"Infected: {currInfected}");
+                Console.WriteLine($"Max Infected: {maxInfected}\n");
                 grid.PrintGrid(agents);
 
                 Thread.Sleep(100);
