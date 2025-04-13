@@ -27,16 +27,15 @@ namespace Epidemy_Evolution_Optimalizer
             this.Position = position;
         }
 
-        public List<GridPosition> GetPossibleMoves(GridMap grid)
+        public List<GridPosition> GetPossibleMoves(GridMap grid, int[] movesRanges)
         {
             int newX;
             int newY;
             List<GridPosition> possibleMoves = new List<GridPosition>();
-            int[] moves = { -1, 0, 1 };
 
-            foreach (int x in moves)
+            foreach (int x in movesRanges)
             {
-                foreach (int y in moves)
+                foreach (int y in movesRanges)
                 {
                     newX = this.Position.X + x;
                     newY = this.Position.Y + y;
@@ -54,7 +53,8 @@ namespace Epidemy_Evolution_Optimalizer
 
         public void Move(GridMap grid, Random random)
         {
-            List<GridPosition> possibleMoves = GetPossibleMoves(grid);
+            int[] movesRanges = { -2, -1, 0, 1, 2 };
+            List<GridPosition> possibleMoves = GetPossibleMoves(grid, movesRanges);
 
             int randomIndex = random.Next(possibleMoves.Count);
             this.Position = possibleMoves[randomIndex];
@@ -67,7 +67,9 @@ namespace Epidemy_Evolution_Optimalizer
 
             if (this.Status == SIR.Infected)
             {
-                List<GridPosition> infectionRadius = GetPossibleMoves(grid);
+                int[] movesRanges = { -1, 0, 1 };
+                List<GridPosition> infectionRadius = GetPossibleMoves(grid, movesRanges);
+
                 foreach (GridPosition tile in infectionRadius)
                 {
                     if (grid.Tiles[tile.Y, tile.X] == TileState.Safe)
@@ -81,7 +83,8 @@ namespace Epidemy_Evolution_Optimalizer
 
         public void CloseGridTileStatus(GridMap grid)
         {
-            List<GridPosition> infectionRadius = GetPossibleMoves(grid);
+            int[] movesRanges = { -1, 0, 1 };
+            List<GridPosition> infectionRadius = GetPossibleMoves(grid, movesRanges);
 
             foreach(GridPosition tile in infectionRadius)
             {
@@ -151,12 +154,12 @@ namespace Epidemy_Evolution_Optimalizer
                     {
                         case SIR.Infected:
                             Recover(time);
-                            Console.WriteLine("RECOVERED !!");
+                            //Console.WriteLine("RECOVERED !!");
                             break;
 
                         case SIR.Recovered:
                             this.Status = SIR.Susceptible;
-                            Console.WriteLine("LOST IMUNITY !!");
+                            //Console.WriteLine("LOST IMUNITY !!");
                             break;
                     }
                 }
