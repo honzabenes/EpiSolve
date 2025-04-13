@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Epidemy_Evolution_Optimalizer
@@ -20,8 +21,8 @@ namespace Epidemy_Evolution_Optimalizer
         public Agent(SIR status, AgentAge age, GridPosition position)
         {
             this.Status = status;
-            this.TimeInfected = 0;
-            this.TimeRecovered = 0;
+            this.TimeInfected = 1;
+            this.TimeRecovered = 1;
             this.Age = age; 
             this.Position = position;
         }
@@ -88,7 +89,19 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
-        public void TryInfect(GridMap grid, TransmissionRates transmissionRates, Random random)
+        private void Infect(int time)
+        {
+            this.Status = SIR.Infected;
+            this.TimeInfected = time;
+        }
+
+        private void Recover(int time)
+        {
+            this.Status = SIR.Recovered;
+            this.TimeRecovered = time;
+        }
+
+        public void TryInfect(GridMap grid, int time, TransmissionRates transmissionRates, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
@@ -99,42 +112,63 @@ namespace Epidemy_Evolution_Optimalizer
                 case TileState.Safe:
                     if (randomDouble < transmissionRates.Safe)
                     {
-                        this.Status = SIR.Infected;
+                        Infect(time);
                     }
                     break;
 
                 case TileState.ModerateRisk:
                     if (randomDouble < transmissionRates.ModerateRisk)
                     {
-                        this.Status = SIR.Infected;
+                        Infect(time);
                     }
                     break;
 
                 case TileState.HighRisk:
                     if (randomDouble < transmissionRates.HighRisk)
                     {
-                        this.Status = SIR.Infected;
+                        Infect(time);
                     }
                     break;
             }
         }
 
-        public void TryRecover(int minRecoveryTime, int time, double recoveryRate, Random random)
+        private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minStatusTime, int time, double statusChangeRate, Random random)
         {
-            int delta = time - minRecoveryTime;
+            int delta = time - statusChangedTime;
 
-            if (this.Status == SIR.Infected && delta > minRecoveryTime)
+            if (this.Status == statusToChangeFrom && delta > minStatusTime)
             {
-                if (recoveryRate < random.NextDouble())
+                if (random.NextDouble() < statusChangeRate)
                 {
-                    this.Status = SIR.Recovered;
+                    switch (statusToChangeFrom)
+                    {
+                        case SIR.Infected:
+                            Recover(time);
+                            Console.WriteLine("RECOVERED !!");
+                            break;
+
+                        case SIR.Recovered:
+                            this.Status = SIR.Susceptible;
+                            Console.WriteLine("LOST IMUNITY !!");
+                            break;
+                    }
                 }
             }
         }
 
+        public void TryRecover(int minRecoveryTime, int time, double recoveryRate, Random random)
+        {
+            TryChangeStatus(SIR.Infected, this.TimeInfected, minRecoveryTime, time, recoveryRate, random);
+        }
+
+        public void TryLoseImunity(int minImunityTime, int time, double imunityLoseRate, Random random)
+        {
+            TryChangeStatus(SIR.Recovered, this.TimeRecovered, minImunityTime, time, imunityLoseRate, random);
+        }
+
         public override string ToString()
         {
-            return $"Status: {Status}, Age: {Age}, Position {this.Position.ToString()}";
+            return $"Status: {Status}, Time infected: {TimeInfected}, Time recovered: {TimeRecovered}, Age: {Age}, Position {this.Position.ToString()}";
         }
     }
 }

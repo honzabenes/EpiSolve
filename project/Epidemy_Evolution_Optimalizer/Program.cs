@@ -27,19 +27,22 @@ namespace Epidemy_Evolution_Optimalizer
         {
             GridMap grid = new GridMap(10, 20);
             int agentsCount = 10;
-            int simulationTime = 100;
+            int simulationTime = 300;
 
             double safeRate = 0.001;
             double moderateRiskRate = 0.3;
             double highRiskRate = 0.8;
             TransmissionRates transmissionRates = new TransmissionRates(safeRate, moderateRiskRate, highRiskRate);
 
-            int minRecoveryTime = 20;
+            int minRecoveryTime = 50;
             double recoveryRate = 0.8;
+            int minImunityTime = 5;
+            double imunityLoseRate = 0.8;
 
             Simulation.Simulate(grid, agentsCount, simulationTime, 
-                                transmissionRates, minRecoveryTime,
-                                recoveryRate);
+                                transmissionRates, 
+                                minRecoveryTime, recoveryRate,
+                                minImunityTime, imunityLoseRate);
         }
     }
 }
