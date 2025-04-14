@@ -64,8 +64,9 @@ namespace Epidemy_Evolution_Optimalizer
         {
             Random random = new Random();
             Agent[] agents = InitAgents(grid, agentsCount);
-            int maxInfected = 0;
             int currInfected = 0;
+            int maxInfected = 0;
+            int totalInfected = 0;
             double fearOfVaccination = 0.9;
             double changeOfFearFactor;
             bool vaccinationFound = false;
@@ -74,13 +75,6 @@ namespace Epidemy_Evolution_Optimalizer
             for (int time = 1; time < simulationTime + 1; time++)
             {
                 currInfected = 0;
-                changeOfFearFactor = (random.NextDouble() * 2 - 1) / 10;
-                vaccinationProgress += random.NextDouble() / 100;
-                if (vaccinationProgress > 1.0) { vaccinationFound = true; }
-                fearOfVaccination += changeOfFearFactor;
-                
-                if (fearOfVaccination < 0) { fearOfVaccination = 0; }
-                else if (fearOfVaccination > 1) { fearOfVaccination = 1; }
 
                 //changeOfFearFactor = (random.NextDouble() * 2 - 1) / 10;
                 //vaccinationProgress += random.NextDouble() / 100;
@@ -100,17 +94,10 @@ namespace Epidemy_Evolution_Optimalizer
                 {
                     agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
                     agent.TryLoseImunity(minImunityTime, time, imunityLoseRate, random);
-<<<<<<< HEAD
                     //if (vaccinationFound)
                     //{
                     //    agent.TryVaccinate(fearOfVaccination, time, vaccinationSuccessRate, random);
                     //}
-=======
-                    if (vaccinationFound)
-                    {
-                        agent.TryVaccinate(fearOfVaccination, time, vaccinationSuccessRate, random);
-                    }
->>>>>>> 7b13b2e3e5971014b544ec5a7ad33778c4af0e74
                     agent.Move(grid, random);
                     Console.WriteLine(agent.ToString()); // CONTROL PRINT
                     agent.SetGridTileStatus(grid);
@@ -122,6 +109,7 @@ namespace Epidemy_Evolution_Optimalizer
                     }
                     if (agent.Status == SIR.Infected)
                     {
+                        agent.beenInfected = true;
                         currInfected++;
                     }
                 }
@@ -132,13 +120,8 @@ namespace Epidemy_Evolution_Optimalizer
                 //Console.Clear();
 
                 Console.WriteLine($"Time: {time}");
-<<<<<<< HEAD
                 //Console.WriteLine($"Vac progress: {vaccinationProgress}");
                 //Console.WriteLine($"Vac found: {vaccinationFound}");
-=======
-                Console.WriteLine($"Vac progress: {vaccinationProgress}");
-                Console.WriteLine($"Vac found: {vaccinationFound}");
->>>>>>> 7b13b2e3e5971014b544ec5a7ad33778c4af0e74
                 Console.WriteLine($"Fear of vac: {fearOfVaccination}");
                 Console.WriteLine($"Infected: {currInfected}");
                 Console.WriteLine($"Max Infected: {maxInfected}\n");
@@ -146,6 +129,10 @@ namespace Epidemy_Evolution_Optimalizer
 
                 //Thread.Sleep(100);
             }
+
+            foreach (Agent agent in agents) { totalInfected += agent.beenInfected ? 1 : 0; }
+
+            Console.WriteLine(totalInfected);
 
             return maxInfected;
         }

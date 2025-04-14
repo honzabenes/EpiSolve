@@ -12,6 +12,7 @@ namespace Epidemy_Evolution_Optimalizer
     class Agent
     {
         public SIR Status { get; set; }
+        public bool beenInfected { get; set; }
         public int TimeInfected { get; set; }
         public int TimeRecovered { get; set; }
         public int TimeVaccinated { get; set; }
@@ -22,6 +23,7 @@ namespace Epidemy_Evolution_Optimalizer
         public Agent(SIR status, AgentAge age, GridPosition position)
         {
             this.Status = status;
+            this.beenInfected = false;
             this.TimeInfected = 1;
             this.TimeRecovered = 1;
             this.TimeVaccinated = 1;
