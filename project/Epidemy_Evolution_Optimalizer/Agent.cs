@@ -57,9 +57,19 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public void Move(GridMap grid, Random random)
+        public void Move(GridMap grid, bool isLockdown, Random random)
         {
-            int[] movesRanges = { -2, -1, 0, 1, 2 };
+            int[] movesRanges;
+
+            if (isLockdown)
+            {
+                movesRanges = new int[] { -1, 0, 1 };
+            }
+            else
+            {
+                movesRanges = new int[] { -2, -1, 0, 1, 2 };
+            }
+
             List<GridPosition> possibleMoves = GetPossibleMoves(grid, movesRanges);
 
             int randomIndex = random.Next(possibleMoves.Count);
@@ -122,12 +132,14 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public void TryInfect(GridMap grid, int time, TransmissionRates transmissionRates, 
+        public void TryInfect(GridMap grid, int time, bool isLockdown, TransmissionRates transmissionRates, 
                               double childImunityFactor, double elderImunityFactor, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
             double randomDouble = random.NextDouble();
+
+            if (isLockdown) { randomDouble *= 2; }
 
             switch (this.Age)
             {
