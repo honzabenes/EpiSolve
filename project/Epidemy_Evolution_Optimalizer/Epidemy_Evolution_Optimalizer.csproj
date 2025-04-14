@@ -50,6 +50,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation.cs" />
+    <Compile Include="SimulationResult.cs" />
     <Compile Include="TypeAgentAge.cs" />
     <Compile Include="TypeSIR.cs" />
     <Compile Include="TypeTileState.cs" />

@@ -82,6 +82,7 @@ namespace Epidemy_Evolution_Optimalizer
 
             // lockdown
             bool isLockdown = false;
+            int lockdownDuration = 0;
 
             
             for (int time = 1; time < simulationTime + 1; time++)
@@ -131,10 +132,12 @@ namespace Epidemy_Evolution_Optimalizer
                 if (currInfected >= lockdownStartTreshold) { isLockdown = true; }
                 else if (currInfected <= lockdownEndTreshold) { isLockdown = false; }
 
-                // CONTROL PRINTS
-                //Console.Clear();
+                if (isLockdown) { lockdownDuration++; }
 
-                    Console.WriteLine($"Time: {time}");
+                // CONTROL PRINTS
+                Console.Clear();
+
+                Console.WriteLine($"Time: {time}");
                 //Console.WriteLine($"Vac progress: {vaccinationProgress}");
                 //Console.WriteLine($"Vac found: {vaccinationFound}");
                 //Console.WriteLine($"Fear of vac: {fearOfVaccination}");
@@ -143,7 +146,7 @@ namespace Epidemy_Evolution_Optimalizer
                 Console.WriteLine($"Max Infected: {maxInfected}\n");
                 grid.PrintGrid(agents);
 
-                //Thread.Sleep(100);
+                Thread.Sleep(100);
 
                 if (currInfected == 0)
                 {
@@ -153,6 +156,9 @@ namespace Epidemy_Evolution_Optimalizer
             }
 
             foreach (Agent agent in agents) { totalInfected += agent.beenInfected ? 1 : 0; }
+
+            SimulationResult result = new SimulationResult(totalInfected, maxInfected, lockdownDuration);
+            Console.WriteLine(result.ToString());
 
             return maxInfected;
         }

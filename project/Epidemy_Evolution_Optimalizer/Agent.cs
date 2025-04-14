@@ -185,12 +185,10 @@ namespace Epidemy_Evolution_Optimalizer
                     {
                         case SIR.Infected:
                             Recover(time);
-                            //Console.WriteLine("RECOVERED !!");
                             break;
 
                         case SIR.Recovered:
                             this.Status = SIR.Susceptible;
-                            //Console.WriteLine("LOST IMUNITY !!");
                             break;
                     }
                 }
