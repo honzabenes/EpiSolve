@@ -21,9 +21,21 @@ namespace Epidemy_Evolution_Optimalizer
                 int randomY = random.Next(grid.Height);
                 GridPosition position = new GridPosition(randomY, randomX);
 
-                AgentAge[] ages = Enum.GetValues(typeof(AgentAge)).Cast<AgentAge>().ToArray();
-                int randomAgeIndex = random.Next(ages.Length);
-                AgentAge age = ages[randomAgeIndex];
+                AgentAge age;
+                double randomDouble = random.NextDouble();
+
+                if (randomDouble > 0.4)
+                {
+                    age = AgentAge.Adult;
+                }
+                else if (randomDouble > 0.2)
+                {
+                    age = AgentAge.Child;
+                }
+                else
+                {
+                    age = AgentAge.Elderly;
+                }
 
                 SIR status;
                 if (!isSomeoneInfected)
@@ -42,20 +54,36 @@ namespace Epidemy_Evolution_Optimalizer
             return agents;
         }
 
+
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
                                    TransmissionRates transmissionRates, 
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLoseRate,
-                                   double childFactor, double elderFactor)
+                                   double childImunityFactor, double elderImunityFactor,
+                                   double vaccinationSuccessRate)
         {
             Random random = new Random();
+            Agent[] agents = InitAgents(grid, agentsCount);
             int maxInfected = 0;
             int currInfected = 0;
-            Agent[] agents = InitAgents(grid, agentsCount);
+            double fearOfVaccination = 0.9;
+            double changeOfFearFactor;
+            bool vaccinationFound = false;
+            double vaccinationProgress = 0.0;
             
             for (int time = 1; time < simulationTime + 1; time++)
             {
                 currInfected = 0;
+
+                //changeOfFearFactor = (random.NextDouble() * 2 - 1) / 10;
+                //vaccinationProgress += random.NextDouble() / 100;
+
+                //if (vaccinationProgress > 1.0) { vaccinationFound = true; }
+                //fearOfVaccination += changeOfFearFactor;
+               
+                //if (fearOfVaccination < 0) { fearOfVaccination = 0; }
+                //else if (fearOfVaccination > 1) { fearOfVaccination = 1; }
+
 
                 foreach (Agent agent in agents)
                 {
@@ -65,14 +93,18 @@ namespace Epidemy_Evolution_Optimalizer
                 {
                     agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
                     agent.TryLoseImunity(minImunityTime, time, imunityLoseRate, random);
+                    //if (vaccinationFound)
+                    //{
+                    //    agent.TryVaccinate(fearOfVaccination, time, vaccinationSuccessRate, random);
+                    //}
                     agent.Move(grid, random);
-                    //Console.WriteLine(agent.ToString()); // CONTROL PRINT
+                    Console.WriteLine(agent.ToString()); // CONTROL PRINT
                     agent.SetGridTileStatus(grid);
                 }
                 foreach (Agent agent in agents)
                 {
                     if (agent.Status == SIR.Susceptible) {
-                        agent.TryInfect(grid, time, transmissionRates, childFactor, elderFactor, random);
+                        agent.TryInfect(grid, time, transmissionRates, childImunityFactor, elderImunityFactor, random);
                     }
                     if (agent.Status == SIR.Infected)
                     {
@@ -86,6 +118,9 @@ namespace Epidemy_Evolution_Optimalizer
                 Console.Clear();
 
                 Console.WriteLine($"Time: {time}");
+                //Console.WriteLine($"Vac progress: {vaccinationProgress}");
+                //Console.WriteLine($"Vac found: {vaccinationFound}");
+                Console.WriteLine($"Fear of vac: {fearOfVaccination}");
                 Console.WriteLine($"Infected: {currInfected}");
                 Console.WriteLine($"Max Infected: {maxInfected}\n");
                 grid.PrintGrid(agents);

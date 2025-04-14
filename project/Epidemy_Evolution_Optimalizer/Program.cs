@@ -39,16 +39,18 @@ namespace Epidemy_Evolution_Optimalizer
             double recoveryRate = 0.8;
             int minImunityTime = 5;
             double imunityLoseRate = 0.8;
+            double vaccinationSuccesRate = 0.9;
 
-            double childFactor = 0.85; // the lower the less imune
-            double elderFactor = 0.85; // the lowe the less imune
+            double childImunityFactor = 0.85; // the lower the less imune
+            double elderImunityFactor = 0.85; // the lowe the less imune
             //
 
             Simulation.Simulate(grid, agentsCount, simulationTime, 
                                 transmissionRates, 
                                 minRecoveryTime, recoveryRate,
                                 minImunityTime, imunityLoseRate,
-                                childFactor, elderFactor);
+                                childImunityFactor, elderImunityFactor,
+                                vaccinationSuccesRate);
         }
     }
 }

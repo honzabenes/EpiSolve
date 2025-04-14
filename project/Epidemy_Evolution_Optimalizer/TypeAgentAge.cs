@@ -12,5 +12,4 @@ namespace Epidemy_Evolution_Optimalizer
         Adult,
         Elderly
     }
-
 }

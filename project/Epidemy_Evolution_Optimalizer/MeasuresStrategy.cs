@@ -12,6 +12,7 @@ namespace Epidemy_Evolution_Optimalizer
         double LockdownEndThreshold { get; set; }
         double LockdownReductionFactor { get; set; }
 
+
         public MeasuresStrategy(Random random)
         {
             this.LockdownReductionFactor = random.NextDouble();
@@ -22,12 +23,14 @@ namespace Epidemy_Evolution_Optimalizer
             } while (this.LockdownStartThreshold <= this.LockdownEndThreshold);
         }
 
+
         public MeasuresStrategy(double lockdownStartThreshold, double lockdownEndThreshold, double lockdownReductionFactor)
         {
             this.LockdownStartThreshold = lockdownStartThreshold;
             this.LockdownEndThreshold = lockdownEndThreshold;
             this.LockdownReductionFactor = lockdownReductionFactor;
         }
+
 
         public MeasuresStrategy Clone()
         {

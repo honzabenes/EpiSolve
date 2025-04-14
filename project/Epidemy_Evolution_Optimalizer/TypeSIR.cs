@@ -10,6 +10,8 @@ namespace Epidemy_Evolution_Optimalizer
     {
         Susceptible,
         Infected,
-        Recovered
+        Recovered,
+        Vaccinated,
+        Dead
     }
 }

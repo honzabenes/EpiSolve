@@ -12,6 +12,7 @@ namespace Epidemy_Evolution_Optimalizer
         public int Width { get; set; }
         public TileState[,] Tiles { get; set; }
 
+
         public GridMap(int height, int width)
         {
             this.Height = height;
@@ -27,25 +28,30 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
+
         public bool isValidPosition(int y, int x)
         {
             return (x >= 0 && y >= 0 && x < this.Width && y < this.Height);
         }
+
 
         public bool isValidPosition(GridPosition position)
         {
             return isValidPosition(position.Y, position.X);
         }
 
+
         public TileState GetTileState(int x, int y)
         {
             return Tiles[y, x];
         }
 
+
         public TileState GetTileState(GridPosition position)
         {
             return GetTileState(position.Y, position.X);
         }
+
 
         public void PrintGrid(Agent[] agents)
         {

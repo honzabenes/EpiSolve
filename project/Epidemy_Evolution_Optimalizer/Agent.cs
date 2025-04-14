@@ -14,6 +14,7 @@ namespace Epidemy_Evolution_Optimalizer
         public SIR Status { get; set; }
         public int TimeInfected { get; set; }
         public int TimeRecovered { get; set; }
+        public int TimeVaccinated { get; set; }
         public AgentAge Age { get; set; }
         public GridPosition Position { get; set; }
 
@@ -23,9 +24,11 @@ namespace Epidemy_Evolution_Optimalizer
             this.Status = status;
             this.TimeInfected = 1;
             this.TimeRecovered = 1;
+            this.TimeVaccinated = 1;
             this.Age = age; 
             this.Position = position;
         }
+
 
         public List<GridPosition> GetPossibleMoves(GridMap grid, int[] movesRanges)
         {
@@ -51,6 +54,7 @@ namespace Epidemy_Evolution_Optimalizer
             return possibleMoves;
         }
 
+
         public void Move(GridMap grid, Random random)
         {
             int[] movesRanges = { -2, -1, 0, 1, 2 };
@@ -59,6 +63,7 @@ namespace Epidemy_Evolution_Optimalizer
             int randomIndex = random.Next(possibleMoves.Count);
             this.Position = possibleMoves[randomIndex];
         }
+
 
         public void SetGridTileStatus(GridMap grid)
         {
@@ -81,6 +86,7 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
+
         public void CloseGridTileStatus(GridMap grid)
         {
             int[] movesRanges = { -1, 0, 1 };
@@ -92,11 +98,13 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
+
         private void Infect(int time)
         {
             this.Status = SIR.Infected;
             this.TimeInfected = time;
         }
+
 
         private void Recover(int time)
         {
@@ -104,8 +112,16 @@ namespace Epidemy_Evolution_Optimalizer
             this.TimeRecovered = time;
         }
 
+
+        private void Vaccinate(int time)
+        {
+            this.Status = SIR.Vaccinated;
+            this.TimeVaccinated = time;
+        }
+
+
         public void TryInfect(GridMap grid, int time, TransmissionRates transmissionRates, 
-                              double childFactor, double elderFactor, Random random)
+                              double childImunityFactor, double elderImunityFactor, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
@@ -113,8 +129,8 @@ namespace Epidemy_Evolution_Optimalizer
 
             switch (this.Age)
             {
-                case AgentAge.Child: randomDouble *= childFactor; break;
-                case AgentAge.Elderly: randomDouble *= elderFactor; break;
+                case AgentAge.Child: randomDouble *= childImunityFactor; break;
+                case AgentAge.Elderly: randomDouble *= elderImunityFactor; break;
             }
 
             switch(grid.Tiles[y, x])
@@ -142,6 +158,7 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
+
         private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minStatusTime, int time, double statusChangeRate, Random random)
         {
             int delta = time - statusChangedTime;
@@ -166,15 +183,31 @@ namespace Epidemy_Evolution_Optimalizer
             }
         }
 
-        public void TryRecover(int minRecoveryTime, int time, double recoveryRate, Random random)
+
+        public void TryRecover(int minRecoveryTime, int time, 
+                               double recoveryRate, Random random)
         {
             TryChangeStatus(SIR.Infected, this.TimeInfected, minRecoveryTime, time, recoveryRate, random);
         }
 
-        public void TryLoseImunity(int minImunityTime, int time, double imunityLoseRate, Random random)
+
+        public void TryLoseImunity(int minImunityTime, int time, 
+                                   double imunityLoseRate, Random random)
         {
             TryChangeStatus(SIR.Recovered, this.TimeRecovered, minImunityTime, time, imunityLoseRate, random);
         }
+
+
+        public void TryVaccinate(double fearOfVaccination, int time,
+                                 double vaccinationSuccessRate, Random random)
+        {
+            if (random.NextDouble() > fearOfVaccination && 
+                random.NextDouble() < vaccinationSuccessRate)
+            {
+                Vaccinate(time);
+            }
+        }
+
 
         public override string ToString()
         {
