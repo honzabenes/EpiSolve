@@ -55,12 +55,12 @@ namespace Epidemy_Evolution_Optimalizer
 
 
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
-                                   TransmissionRates transmissionRates, 
+                                   double highRiskRate, double moderateRiskRate, 
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLoseRate,
-                                   double childImunityFactor, double elderImunityFactor,
+                                   double childInfectionRiskFactor, double elderInfectionRiskFactor,
                                    double vaccinationSuccessRate,
-                                   int lockdownStartTreshold, int lockdownEndTreshold)
+                                   int lockdownStartTreshold, int lockdownEndTreshold, double lockdownReductionFactor)
         {
             Random random = new Random();
             Agent[] agents = InitAgents(grid, agentsCount, random);
@@ -117,7 +117,9 @@ namespace Epidemy_Evolution_Optimalizer
                 foreach (Agent agent in agents)
                 {
                     if (agent.Status == SIR.Susceptible) {
-                        agent.TryInfect(grid, time, isLockdown, transmissionRates, childImunityFactor, elderImunityFactor, random);
+                        agent.TryInfect(agents, time, isLockdown, highRiskRate, moderateRiskRate, 
+                                        childInfectionRiskFactor, elderInfectionRiskFactor, 
+                                        lockdownReductionFactor, random);
                     }
                     if (agent.Status == SIR.Infected)
                     {

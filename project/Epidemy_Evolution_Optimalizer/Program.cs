@@ -7,19 +7,6 @@ using System.Threading.Tasks;
 
 namespace Epidemy_Evolution_Optimalizer
 {
-    class TransmissionRates
-    {
-        public double Safe;
-        public double ModerateRisk;
-        public double HighRisk;
-
-        public TransmissionRates(double safe, double moderateRisk, double highRisk)
-        {
-            Safe = safe;
-            ModerateRisk = moderateRisk;
-            HighRisk = highRisk;
-        }
-    }
 
     class Program
     {
@@ -30,32 +17,31 @@ namespace Epidemy_Evolution_Optimalizer
             int agentsCount = 10;
             int simulationTime = 300;
 
-            double safeRate = 0.001;
             double moderateRiskRate = 0.3;
             double highRiskRate = 0.8;
-            TransmissionRates transmissionRates = new TransmissionRates(safeRate, moderateRiskRate, highRiskRate);
 
             int minRecoveryTime = 50;
             double recoveryRate = 0.8;
             int minImunityTime = 5;
             double imunityLossRate = 0.8;
 
-            double childImunityFactor = 0.85; // the lower the less imune
-            double elderImunityFactor = 0.85; // the lowe the less imune
+            double childIfectionRiskFactor = 1.2; // the higher the bigger chance of infection
+            double elderInfectionRiskFactor = 1.2;
 
             double vaccinationSuccesRate = 0.9;
 
             int lockdownStartThreshold = 7;
             int lockdownEndThreshold = 3;
+            double lockdownReductionFactor = 0.5;
 
 
             Simulation.Simulate(grid, agentsCount, simulationTime, 
-                                transmissionRates, 
+                                highRiskRate, moderateRiskRate, 
                                 minRecoveryTime, recoveryRate,
                                 minImunityTime, imunityLossRate,
-                                childImunityFactor, elderImunityFactor,
+                                childIfectionRiskFactor, elderInfectionRiskFactor,
                                 vaccinationSuccesRate,
-                                lockdownStartThreshold, lockdownEndThreshold);
+                                lockdownStartThreshold, lockdownEndThreshold, lockdownReductionFactor);
         }
     }
 }

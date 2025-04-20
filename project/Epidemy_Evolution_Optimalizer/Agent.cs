@@ -115,6 +115,7 @@ namespace Epidemy_Evolution_Optimalizer
         {
             this.Status = SIR.Infected;
             this.TimeInfected = time;
+            this.beenInfected = true;
         }
 
 
@@ -132,43 +133,71 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public void TryInfect(GridMap grid, int time, bool isLockdown, TransmissionRates transmissionRates, 
-                              double childImunityFactor, double elderImunityFactor, Random random)
+        public void TryInfect(Agent[] agents, int time, bool isLockdown, double highRiskRate, double moderateRiskRate, 
+                              double childInfectionRiskFactor, double elderInfectionRiskFactor,
+                              double lockdownReductionFactor, Random random)
         {
             int x = this.Position.X;
             int y = this.Position.Y;
-            double randomDouble = random.NextDouble();
 
-            if (isLockdown) { randomDouble *= 2; }
+            int numberOfModerateRiskNeighbors = 0;
+            int numberOfHighRiskNeighbors = 0;
 
-            switch (this.Age)
+            foreach (Agent otherAgent in agents)
             {
-                case AgentAge.Child: randomDouble *= childImunityFactor; break;
-                case AgentAge.Elderly: randomDouble *= elderImunityFactor; break;
+                if (otherAgent == this) continue;
+
+                if (otherAgent.Status != SIR.Infected) continue;
+
+                int dx = Math.Abs(otherAgent.Position.X - x);
+                int dy = Math.Abs(otherAgent.Position.Y - y);
+
+                if (dx == 0 && dy == 0)
+                {
+                    numberOfHighRiskNeighbors++;
+                }
+                else if (Math.Max(dx, dy) == 1)
+                {
+                    numberOfModerateRiskNeighbors++;
+                }
             }
 
-            switch(grid.Tiles[y, x])
+
+            double probOfInfection = 0.0;
+
+            if (numberOfModerateRiskNeighbors > 0 || numberOfHighRiskNeighbors > 0)
             {
-                case TileState.Safe:
-                    if (randomDouble < transmissionRates.Safe)
-                    {
-                        Infect(time);
-                    }
-                    break;
+                if (isLockdown)
+                {
+                    moderateRiskRate *= lockdownReductionFactor;
+                    highRiskRate *= lockdownReductionFactor;
+                }
 
-                case TileState.ModerateRisk:
-                    if (randomDouble < transmissionRates.ModerateRisk)
+                switch (this.Age)
+                {
+                    case AgentAge.Child: 
                     {
-                        Infect(time);
+                        moderateRiskRate *= Math.Min(childInfectionRiskFactor, 1);
+                        highRiskRate *= Math.Min(childInfectionRiskFactor, 1);
+                        break;
                     }
-                    break;
+                    case AgentAge.Elderly:
+                    {
+                        moderateRiskRate *= Math.Min(elderInfectionRiskFactor, 1);
+                        highRiskRate *= Math.Min(elderInfectionRiskFactor, 1);
+                        break;
+                    }
+                }
 
-                case TileState.HighRisk:
-                    if (randomDouble < transmissionRates.HighRisk)
-                    {
-                        Infect(time);
-                    }
-                    break;
+                double probOfNoInfection = Math.Pow(1.0 - moderateRiskRate, numberOfModerateRiskNeighbors) *
+                                           Math.Pow(1.0 - highRiskRate, numberOfHighRiskNeighbors);
+
+                probOfInfection = 1.0 - probOfNoInfection;
+            }
+
+            if (random.NextDouble() < probOfInfection)
+            {
+                Infect(time);
             }
         }
 
