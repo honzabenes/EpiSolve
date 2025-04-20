@@ -54,20 +54,13 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
-                                   double highRiskRate, double moderateRiskRate, 
-                                   int minRecoveryTime, double recoveryRate,
-                                   int minImunityTime, double imunityLossRate,
-                                   double deathProbability,
-                                   double childWeakerImunityFactor, double elderWeakerImunityFactor,
-                                   double lockdownStartThreshold, double lockdownEndTreshold, 
-                                   double lockdownReductionFactor, double lockdownMovementRestricition)
+        public static int Simulate(SimulationParameters simParams, MeasuresStrategy strategy)
         {
             Random random = new Random();
-            Agent[] agents = InitAgents(grid, agentsCount, random);
+            Agent[] agents = InitAgents(simParams.Grid, simParams.AgentsCount, random);
 
             // time
-            int epidemyDuration = simulationTime;
+            int epidemyDuration = simParams.SimulationTime;
 
             // infection metric
             int currInfected;
@@ -80,34 +73,37 @@ namespace Epidemy_Evolution_Optimalizer
             int lockdownDuration = 0;
 
             
-            for (int time = 1; time < simulationTime + 1; time++)
+            for (int time = 1; time < simParams.SimulationTime + 1; time++)
             {
                 currInfected = 0;
 
                 foreach (Agent agent in agents)
                 {
-                    agent.Move(grid, isLockdown, lockdownMovementRestricition, random);
-                    agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
-                    agent.TryLoseImunity(minImunityTime, time, imunityLossRate, random);
-                    agent.TryDie(deathProbability, childWeakerImunityFactor, elderWeakerImunityFactor, random);
+                    agent.Move(simParams.Grid, isLockdown, strategy.LockdownMovementRestriction, random);
+                    agent.TryRecover(simParams.MinRecoveryTime, time, simParams.RecoveryRate, random);
+                    agent.TryLoseImunity(simParams.MinImunityTime, time, simParams.ImunityLossRate, random);
+                    agent.TryDie(simParams.DeathProbability, simParams.ChildWeakerImunityFactor, 
+                                 simParams.ElderWeakerImunityFactor, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
                 }
                 foreach (Agent agent in agents)
                 {
-                    agent.TryInfect(agents, time, isLockdown, highRiskRate, moderateRiskRate, 
-                                    childWeakerImunityFactor, elderWeakerImunityFactor, 
-                                    lockdownReductionFactor, random);
+                    agent.TryInfect(agents, time, isLockdown, 
+                                    simParams.HighRiskRate, simParams.ModerateRiskRate, 
+                                    simParams.ChildWeakerImunityFactor, simParams.ElderWeakerImunityFactor, 
+                                    strategy.LockdownReductionFactor,
+                                    random);
 
                     if (agent.Status == SIR.Infected) currInfected++;
                 }
 
                 if (currInfected > maxInfected) { maxInfected = currInfected; }
 
-                if (currInfected >= (int)Math.Round(agents.Length * lockdownStartThreshold))
+                if (currInfected >= (int)Math.Round(agents.Length * strategy.LockdownStartThreshold))
                 {
                     isLockdown = true;
                 }
-                else if (currInfected <= (int)Math.Round(agents.Length * lockdownEndTreshold))
+                else if (currInfected <= (int)Math.Round(agents.Length * strategy.LockdownEndThreshold))
                 {
                     isLockdown = false;
                 }
@@ -137,7 +133,9 @@ namespace Epidemy_Evolution_Optimalizer
                 totalDead += agent.Status == SIR.Dead ? 1 : 0;
             }
 
-            SimulationResult result = new SimulationResult(totalInfected, maxInfected, totalDead, epidemyDuration, lockdownDuration);
+            SimulationResult result = new SimulationResult(totalInfected, maxInfected, 
+                                                           totalDead, epidemyDuration, 
+                                                           lockdownDuration);
             Console.WriteLine(result.ToString());
 
             return maxInfected;

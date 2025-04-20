@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Epidemy_Evolution_Optimalizer
 {
-    internal class MeasuresStrategy
+    class MeasuresStrategy
     {
-        double LockdownStartThreshold { get; set; }
-        double LockdownEndThreshold { get; set; }
-        double LockdownReductionFactor { get; set; }
-        double LockdownMovementRestriction { get; set; }
+        public double LockdownStartThreshold { get; set; }
+        public double LockdownEndThreshold { get; set; }
+        public double LockdownReductionFactor { get; set; }
+        public double LockdownMovementRestriction { get; set; }
 
         public MeasuresStrategy(Random random)
         {
