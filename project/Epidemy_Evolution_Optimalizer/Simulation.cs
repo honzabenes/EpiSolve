@@ -60,7 +60,7 @@ namespace Epidemy_Evolution_Optimalizer
                                    int minImunityTime, double imunityLoseRate,
                                    double childWeakerImunityFactor, double elderWeakerImunityFactor,
                                    double vaccinationSuccessRate,
-                                   int lockdownStartTreshold, int lockdownEndTreshold, 
+                                   int lockdownStartThreshold, int lockdownEndTreshold, 
                                    double lockdownReductionFactor, double lockdownMovementRestricition)
         {
             Random random = new Random();
@@ -125,7 +125,7 @@ namespace Epidemy_Evolution_Optimalizer
 
                 if (currInfected > maxInfected) { maxInfected = currInfected; }
 
-                if (currInfected >= lockdownStartTreshold) { isLockdown = true; }
+                if (currInfected >= lockdownStartThreshold) { isLockdown = true; }
                 else if (currInfected <= lockdownEndTreshold) { isLockdown = false; }
 
                 if (isLockdown) { lockdownDuration++; }

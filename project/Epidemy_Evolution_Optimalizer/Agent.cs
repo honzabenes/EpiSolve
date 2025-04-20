@@ -106,6 +106,10 @@ namespace Epidemy_Evolution_Optimalizer
         {
             int x = this.Position.X;
             int y = this.Position.Y;
+            
+            double probOfInfection = 0.0;
+            double effectiveHighRiskRate = highRiskRate;
+            double effectiveModerateRiskRate = moderateRiskRate;
 
             int numberOfModerateRiskNeighbors = 0;
             int numberOfHighRiskNeighbors = 0;
@@ -129,35 +133,32 @@ namespace Epidemy_Evolution_Optimalizer
                 }
             }
 
-
-            double probOfInfection = 0.0;
-
             if (numberOfModerateRiskNeighbors > 0 || numberOfHighRiskNeighbors > 0)
             {
                 if (isLockdown)
                 {
-                    moderateRiskRate *= lockdownReductionFactor;
-                    highRiskRate *= lockdownReductionFactor;
+                    effectiveModerateRiskRate *= lockdownReductionFactor;
+                    effectiveHighRiskRate *= lockdownReductionFactor;
                 }
 
                 switch (this.Age)
                 {
                     case AgentAge.Child: 
                     {
-                        moderateRiskRate *= Math.Min(childWeakerImunityFactor, 1);
-                        highRiskRate *= Math.Min(childWeakerImunityFactor, 1);
+                        effectiveModerateRiskRate *= Math.Min(childWeakerImunityFactor, 1);
+                        effectiveHighRiskRate *= Math.Min(childWeakerImunityFactor, 1);
                         break;
                     }
                     case AgentAge.Elderly:
                     {
-                        moderateRiskRate /= elderWeakerImunityFactor;
-                        highRiskRate /= elderWeakerImunityFactor;
+                        effectiveModerateRiskRate /= elderWeakerImunityFactor;
+                        effectiveHighRiskRate /= elderWeakerImunityFactor;
                         break;
                     }
                 }
 
-                double probOfNoInfection = Math.Pow(1.0 - moderateRiskRate, numberOfModerateRiskNeighbors) *
-                                           Math.Pow(1.0 - highRiskRate, numberOfHighRiskNeighbors);
+                double probOfNoInfection = Math.Pow(1.0 - effectiveModerateRiskRate, numberOfModerateRiskNeighbors) *
+                                           Math.Pow(1.0 - effectiveHighRiskRate, numberOfHighRiskNeighbors);
 
                 probOfInfection = 1.0 - probOfNoInfection;
             }
@@ -200,9 +201,9 @@ namespace Epidemy_Evolution_Optimalizer
 
 
         public void TryLoseImunity(int minImunityTime, int time, 
-                                   double imunityLoseRate, Random random)
+                                   double imunityLossRate, Random random)
         {
-            TryChangeStatus(SIR.Recovered, this.TimeRecovered, minImunityTime, time, imunityLoseRate, random);
+            TryChangeStatus(SIR.Recovered, this.TimeRecovered, minImunityTime, time, imunityLossRate, random);
         }
 
 
