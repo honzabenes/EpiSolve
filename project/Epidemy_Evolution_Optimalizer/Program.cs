@@ -38,7 +38,7 @@ namespace Epidemy_Evolution_Optimalizer
             int minRecoveryTime = 50;
             double recoveryRate = 0.8;
             int minImunityTime = 5;
-            double imunityLoseRate = 0.8;
+            double imunityLossRate = 0.8;
 
             double childImunityFactor = 0.85; // the lower the less imune
             double elderImunityFactor = 0.85; // the lowe the less imune
@@ -52,7 +52,7 @@ namespace Epidemy_Evolution_Optimalizer
             Simulation.Simulate(grid, agentsCount, simulationTime, 
                                 transmissionRates, 
                                 minRecoveryTime, recoveryRate,
-                                minImunityTime, imunityLoseRate,
+                                minImunityTime, imunityLossRate,
                                 childImunityFactor, elderImunityFactor,
                                 vaccinationSuccesRate,
                                 lockdownStartThreshold, lockdownEndThreshold);

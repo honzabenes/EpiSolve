@@ -12,23 +12,23 @@ namespace Epidemy_Evolution_Optimalizer
     class Agent
     {
         public SIR Status { get; set; }
+        public AgentAge Age { get; set; }
+        public GridPosition Position { get; set; }
         public bool beenInfected { get; set; }
         public int TimeInfected { get; set; }
         public int TimeRecovered { get; set; }
         public int TimeVaccinated { get; set; }
-        public AgentAge Age { get; set; }
-        public GridPosition Position { get; set; }
 
 
         public Agent(SIR status, AgentAge age, GridPosition position)
         {
             this.Status = status;
+            this.Age = age;
+            this.Position = position;
             this.beenInfected = false;
             this.TimeInfected = 1;
             this.TimeRecovered = 1;
             this.TimeVaccinated = 1;
-            this.Age = age; 
-            this.Position = position;
         }
 
 
@@ -173,13 +173,13 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minStatusTime, int time, double statusChangeRate, Random random)
+        private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minDurationInStatus, int time, double probabilityOfChangePerStep, Random random)
         {
             int delta = time - statusChangedTime;
 
-            if (this.Status == statusToChangeFrom && delta > minStatusTime)
+            if (this.Status == statusToChangeFrom && delta > minDurationInStatus)
             {
-                if (random.NextDouble() < statusChangeRate)
+                if (random.NextDouble() < probabilityOfChangePerStep)
                 {
                     switch (statusToChangeFrom)
                     {

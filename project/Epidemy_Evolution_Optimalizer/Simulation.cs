@@ -9,10 +9,9 @@ namespace Epidemy_Evolution_Optimalizer
 {
     static class Simulation
     {
-        private static Agent[] InitAgents(GridMap grid, int agentsCount)
+        private static Agent[] InitAgents(GridMap grid, int agentsCount, Random random)
         {
             Agent[] agents = new Agent[agentsCount];
-            Random random = new Random();
             bool isSomeoneInfected = false;
 
             for (int i = 0; i < agentsCount; i++)
@@ -64,7 +63,7 @@ namespace Epidemy_Evolution_Optimalizer
                                    int lockdownStartTreshold, int lockdownEndTreshold)
         {
             Random random = new Random();
-            Agent[] agents = InitAgents(grid, agentsCount);
+            Agent[] agents = InitAgents(grid, agentsCount, random);
 
             // time
             int epidemyDuration = simulationTime;
