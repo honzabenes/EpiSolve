@@ -59,34 +59,23 @@ namespace Epidemy_Evolution_Optimalizer
             {
                 for (int x = 0; x < this.Width; x++)
                 {
-                    GridPosition position = new GridPosition(y, x);
-                    bool isAgentHere = false;
+                    GridPosition currentPos = new GridPosition(y, x);
+                    Agent agentOnTile = agents.FirstOrDefault(agent => agent.Position == currentPos);
 
-                    switch (this.Tiles[y, x])
+                    if (agentOnTile != null)
                     {
-                        case TileState.Safe:
-
-                            foreach (Agent agent in agents)
-                            {
-                                if (agent.Position == position && !isAgentHere)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Green;
-                                    Console.Write('x');
-                                    isAgentHere = true;
-                                }
-                            }
-                            if (!isAgentHere) { Console.Write('-'); }
-                            break;
-
-                        case TileState.ModerateRisk:
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write('x');
-                            break;
-
-                        case TileState.HighRisk:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write('x');
-                            break;
+                        switch (agentOnTile.Status)
+                        {
+                            case SIR.Susceptible: Console.ForegroundColor = ConsoleColor.Green; Console.Write('S'); break;
+                            case SIR.Infected: Console.ForegroundColor = ConsoleColor.Red; Console.Write('I'); break;
+                            case SIR.Recovered: Console.ForegroundColor = ConsoleColor.Blue; Console.Write('R'); break;
+                            case SIR.Vaccinated: Console.ForegroundColor = ConsoleColor.Cyan; Console.Write('V'); break;
+                            default: Console.Write('?'); break;
+                        }
+                    }
+                    else
+                    {
+                        Console.Write('-');
                     }
                     Console.ResetColor();
                 }

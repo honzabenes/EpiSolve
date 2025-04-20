@@ -58,9 +58,10 @@ namespace Epidemy_Evolution_Optimalizer
                                    double highRiskRate, double moderateRiskRate, 
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLoseRate,
-                                   double childInfectionRiskFactor, double elderInfectionRiskFactor,
+                                   double childWeakerImunityFactor, double elderWeakerImunityFactor,
                                    double vaccinationSuccessRate,
-                                   int lockdownStartTreshold, int lockdownEndTreshold, double lockdownReductionFactor)
+                                   int lockdownStartTreshold, int lockdownEndTreshold, 
+                                   double lockdownReductionFactor, double lockdownMovementRestricition)
         {
             Random random = new Random();
             Agent[] agents = InitAgents(grid, agentsCount, random);
@@ -97,11 +98,6 @@ namespace Epidemy_Evolution_Optimalizer
                 //if (fearOfVaccination < 0) { fearOfVaccination = 0; }
                 //else if (fearOfVaccination > 1) { fearOfVaccination = 1; }
 
-
-                foreach (Agent agent in agents)
-                {
-                    agent.CloseGridTileStatus(grid);
-                }
                 foreach (Agent agent in agents)
                 {
                     agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
@@ -110,15 +106,14 @@ namespace Epidemy_Evolution_Optimalizer
                     //{
                     //    agent.TryVaccinate(fearOfVaccination, time, vaccinationSuccessRate, random);
                     //}
-                    agent.Move(grid, isLockdown, random);
+                    agent.Move(grid, isLockdown, lockdownMovementRestricition, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
-                    agent.SetGridTileStatus(grid);
                 }
                 foreach (Agent agent in agents)
                 {
                     if (agent.Status == SIR.Susceptible) {
                         agent.TryInfect(agents, time, isLockdown, highRiskRate, moderateRiskRate, 
-                                        childInfectionRiskFactor, elderInfectionRiskFactor, 
+                                        childWeakerImunityFactor, elderWeakerImunityFactor, 
                                         lockdownReductionFactor, random);
                     }
                     if (agent.Status == SIR.Infected)

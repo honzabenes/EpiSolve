@@ -57,12 +57,13 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public void Move(GridMap grid, bool isLockdown, Random random)
+        public void Move(GridMap grid, bool isLockdown, double lockdownMovementRestriction, Random random)
         {
             int[] movesRanges;
 
             if (isLockdown)
             {
+                if (random.NextDouble() < lockdownMovementRestriction) { return; }
                 movesRanges = new int[] { -1, 0, 1 };
             }
             else
@@ -74,40 +75,6 @@ namespace Epidemy_Evolution_Optimalizer
 
             int randomIndex = random.Next(possibleMoves.Count);
             this.Position = possibleMoves[randomIndex];
-        }
-
-
-        public void SetGridTileStatus(GridMap grid)
-        {
-            int x = this.Position.X;
-            int y = this.Position.Y;
-
-            if (this.Status == SIR.Infected)
-            {
-                int[] movesRanges = { -1, 0, 1 };
-                List<GridPosition> infectionRadius = GetPossibleMoves(grid, movesRanges);
-
-                foreach (GridPosition tile in infectionRadius)
-                {
-                    if (grid.Tiles[tile.Y, tile.X] == TileState.Safe)
-                    {
-                        grid.Tiles[tile.Y, tile.X] = TileState.ModerateRisk;
-                    }
-                }
-                grid.Tiles[y, x] = TileState.HighRisk;
-            }
-        }
-
-
-        public void CloseGridTileStatus(GridMap grid)
-        {
-            int[] movesRanges = { -1, 0, 1 };
-            List<GridPosition> infectionRadius = GetPossibleMoves(grid, movesRanges);
-
-            foreach(GridPosition tile in infectionRadius)
-            {
-                grid.Tiles[tile.Y, tile.X] = TileState.Safe;
-            }
         }
 
 
@@ -134,7 +101,7 @@ namespace Epidemy_Evolution_Optimalizer
 
 
         public void TryInfect(Agent[] agents, int time, bool isLockdown, double highRiskRate, double moderateRiskRate, 
-                              double childInfectionRiskFactor, double elderInfectionRiskFactor,
+                              double childWeakerImunityFactor, double elderWeakerImunityFactor,
                               double lockdownReductionFactor, Random random)
         {
             int x = this.Position.X;
@@ -177,14 +144,14 @@ namespace Epidemy_Evolution_Optimalizer
                 {
                     case AgentAge.Child: 
                     {
-                        moderateRiskRate *= Math.Min(childInfectionRiskFactor, 1);
-                        highRiskRate *= Math.Min(childInfectionRiskFactor, 1);
+                        moderateRiskRate *= Math.Min(childWeakerImunityFactor, 1);
+                        highRiskRate *= Math.Min(childWeakerImunityFactor, 1);
                         break;
                     }
                     case AgentAge.Elderly:
                     {
-                        moderateRiskRate *= Math.Min(elderInfectionRiskFactor, 1);
-                        highRiskRate *= Math.Min(elderInfectionRiskFactor, 1);
+                        moderateRiskRate /= elderWeakerImunityFactor;
+                        highRiskRate /= elderWeakerImunityFactor;
                         break;
                     }
                 }

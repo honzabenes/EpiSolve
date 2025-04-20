@@ -25,23 +25,25 @@ namespace Epidemy_Evolution_Optimalizer
             int minImunityTime = 5;
             double imunityLossRate = 0.8;
 
-            double childIfectionRiskFactor = 1.2; // the higher the bigger chance of infection
-            double elderInfectionRiskFactor = 1.2;
+            double childWeakerImunityFactor = 0.85; // the less the bigger chance of infection
+            double elderWeakerImunityFactor = 0.85;
 
             double vaccinationSuccesRate = 0.9;
 
             int lockdownStartThreshold = 7;
             int lockdownEndThreshold = 3;
             double lockdownReductionFactor = 0.5;
+            double lockdownMovementRestricion = 0.5;
 
 
             Simulation.Simulate(grid, agentsCount, simulationTime, 
                                 highRiskRate, moderateRiskRate, 
                                 minRecoveryTime, recoveryRate,
                                 minImunityTime, imunityLossRate,
-                                childIfectionRiskFactor, elderInfectionRiskFactor,
+                                childWeakerImunityFactor, elderWeakerImunityFactor,
                                 vaccinationSuccesRate,
-                                lockdownStartThreshold, lockdownEndThreshold, lockdownReductionFactor);
+                                lockdownStartThreshold, lockdownEndThreshold, 
+                                lockdownReductionFactor, lockdownMovementRestricion);
         }
     }
 }
