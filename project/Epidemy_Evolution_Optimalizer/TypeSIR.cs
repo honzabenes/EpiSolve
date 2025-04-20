@@ -11,7 +11,6 @@ namespace Epidemy_Evolution_Optimalizer
         Susceptible,
         Infected,
         Recovered,
-        Vaccinated,
         Dead
     }
 }

@@ -69,7 +69,7 @@ namespace Epidemy_Evolution_Optimalizer
                             case SIR.Susceptible: Console.ForegroundColor = ConsoleColor.Green; Console.Write('S'); break;
                             case SIR.Infected: Console.ForegroundColor = ConsoleColor.Red; Console.Write('I'); break;
                             case SIR.Recovered: Console.ForegroundColor = ConsoleColor.Blue; Console.Write('R'); break;
-                            case SIR.Vaccinated: Console.ForegroundColor = ConsoleColor.Cyan; Console.Write('V'); break;
+                            case SIR.Dead: Console.ForegroundColor = ConsoleColor.White; Console.Write('D'); break;
                             default: Console.Write('?'); break;
                         }
                     }

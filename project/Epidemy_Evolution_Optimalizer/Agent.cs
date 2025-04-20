@@ -93,10 +93,9 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        private void Vaccinate(int time)
+        private void Die()
         {
-            this.Status = SIR.Vaccinated;
-            this.TimeVaccinated = time;
+            this.Status = SIR.Dead;
         }
 
 
@@ -104,6 +103,8 @@ namespace Epidemy_Evolution_Optimalizer
                               double childWeakerImunityFactor, double elderWeakerImunityFactor,
                               double lockdownReductionFactor, Random random)
         {
+            if (this.Status != SIR.Susceptible) return;
+
             int x = this.Position.X;
             int y = this.Position.Y;
             
@@ -145,8 +146,8 @@ namespace Epidemy_Evolution_Optimalizer
                 {
                     case AgentAge.Child: 
                     {
-                        effectiveModerateRiskRate *= Math.Min(childWeakerImunityFactor, 1);
-                        effectiveHighRiskRate *= Math.Min(childWeakerImunityFactor, 1);
+                        effectiveModerateRiskRate /= childWeakerImunityFactor;
+                        effectiveHighRiskRate /= childWeakerImunityFactor;
                         break;
                     }
                     case AgentAge.Elderly:
@@ -172,9 +173,11 @@ namespace Epidemy_Evolution_Optimalizer
 
         private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minDurationInStatus, int time, double probabilityOfChangePerStep, Random random)
         {
+            if (this.Status != statusToChangeFrom) return;
+
             int delta = time - statusChangedTime;
 
-            if (this.Status == statusToChangeFrom && delta > minDurationInStatus)
+            if (delta > minDurationInStatus)
             {
                 if (random.NextDouble() < probabilityOfChangePerStep)
                 {
@@ -207,13 +210,18 @@ namespace Epidemy_Evolution_Optimalizer
         }
 
 
-        public void TryVaccinate(double fearOfVaccination, int time,
-                                 double vaccinationSuccessRate, Random random)
+        public void TryDie(double deathProbability, double childWeakerImunityFactor, double elderWeakerImunityFactor, Random random)
         {
-            if (random.NextDouble() > fearOfVaccination && 
-                random.NextDouble() < vaccinationSuccessRate)
+            if (this.Status != SIR.Infected) return;
+
+            double effectiveDeathProbability = deathProbability;
+
+            if (this.Age == AgentAge.Child) { deathProbability /= childWeakerImunityFactor; }
+            if (this.Age == AgentAge.Elderly) { deathProbability /= elderWeakerImunityFactor; }
+
+            if (random.NextDouble() < effectiveDeathProbability)
             {
-                Vaccinate(time);
+                Die();
             }
         }
 

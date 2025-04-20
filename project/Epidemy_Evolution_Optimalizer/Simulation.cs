@@ -57,10 +57,10 @@ namespace Epidemy_Evolution_Optimalizer
         public static int Simulate(GridMap grid, int agentsCount, int simulationTime, 
                                    double highRiskRate, double moderateRiskRate, 
                                    int minRecoveryTime, double recoveryRate,
-                                   int minImunityTime, double imunityLoseRate,
+                                   int minImunityTime, double imunityLossRate,
+                                   double deathProbability,
                                    double childWeakerImunityFactor, double elderWeakerImunityFactor,
-                                   double vaccinationSuccessRate,
-                                   int lockdownStartThreshold, int lockdownEndTreshold, 
+                                   double lockdownStartThreshold, double lockdownEndTreshold, 
                                    double lockdownReductionFactor, double lockdownMovementRestricition)
         {
             Random random = new Random();
@@ -70,15 +70,10 @@ namespace Epidemy_Evolution_Optimalizer
             int epidemyDuration = simulationTime;
 
             // infection metric
-            int currInfected = 0;
+            int currInfected;
             int maxInfected = 0;
             int totalInfected = 0;
-
-            // vaccination
-            double fearOfVaccination = 0.9;
-            double changeOfFearFactor;
-            bool vaccinationFound = false;
-            double vaccinationProgress = 0.0;
+            int totalDead = 0;
 
             // lockdown
             bool isLockdown = false;
@@ -89,60 +84,46 @@ namespace Epidemy_Evolution_Optimalizer
             {
                 currInfected = 0;
 
-                //changeOfFearFactor = (random.NextDouble() * 2 - 1) / 10;
-                //vaccinationProgress += random.NextDouble() / 100;
-
-                //if (vaccinationProgress > 1.0) { vaccinationFound = true; }
-                //fearOfVaccination += changeOfFearFactor;
-               
-                //if (fearOfVaccination < 0) { fearOfVaccination = 0; }
-                //else if (fearOfVaccination > 1) { fearOfVaccination = 1; }
-
                 foreach (Agent agent in agents)
                 {
-                    agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
-                    agent.TryLoseImunity(minImunityTime, time, imunityLoseRate, random);
-                    //if (vaccinationFound)
-                    //{
-                    //    agent.TryVaccinate(fearOfVaccination, time, vaccinationSuccessRate, random);
-                    //}
                     agent.Move(grid, isLockdown, lockdownMovementRestricition, random);
+                    agent.TryRecover(minRecoveryTime, time, recoveryRate, random);
+                    agent.TryLoseImunity(minImunityTime, time, imunityLossRate, random);
+                    agent.TryDie(deathProbability, childWeakerImunityFactor, elderWeakerImunityFactor, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
                 }
                 foreach (Agent agent in agents)
                 {
-                    if (agent.Status == SIR.Susceptible) {
-                        agent.TryInfect(agents, time, isLockdown, highRiskRate, moderateRiskRate, 
-                                        childWeakerImunityFactor, elderWeakerImunityFactor, 
-                                        lockdownReductionFactor, random);
-                    }
-                    if (agent.Status == SIR.Infected)
-                    {
-                        agent.beenInfected = true;
-                        currInfected++;
-                    }
+                    agent.TryInfect(agents, time, isLockdown, highRiskRate, moderateRiskRate, 
+                                    childWeakerImunityFactor, elderWeakerImunityFactor, 
+                                    lockdownReductionFactor, random);
+
+                    if (agent.Status == SIR.Infected) currInfected++;
                 }
 
                 if (currInfected > maxInfected) { maxInfected = currInfected; }
 
-                if (currInfected >= lockdownStartThreshold) { isLockdown = true; }
-                else if (currInfected <= lockdownEndTreshold) { isLockdown = false; }
+                if (currInfected >= (int)Math.Round(agents.Length * lockdownStartThreshold))
+                {
+                    isLockdown = true;
+                }
+                else if (currInfected <= (int)Math.Round(agents.Length * lockdownEndTreshold))
+                {
+                    isLockdown = false;
+                }
 
-                if (isLockdown) { lockdownDuration++; }
+                if (isLockdown) lockdownDuration++;
 
-                // CONTROL PRINTS
-                Console.Clear();
+                //CONTROL PRINTS
+                //Console.Clear();
 
-                Console.WriteLine($"Time: {time}");
-                //Console.WriteLine($"Vac progress: {vaccinationProgress}");
-                //Console.WriteLine($"Vac found: {vaccinationFound}");
-                //Console.WriteLine($"Fear of vac: {fearOfVaccination}");
-                Console.WriteLine($"Is lockdown: {isLockdown}");
-                Console.WriteLine($"Infected: {currInfected}");
-                Console.WriteLine($"Max Infected: {maxInfected}\n");
-                grid.PrintGrid(agents);
+                //Console.WriteLine($"Time: {time}");
+                //Console.WriteLine($"Is lockdown: {isLockdown}");
+                //Console.WriteLine($"Infected: {currInfected}");
+                //Console.WriteLine($"Max Infected: {maxInfected}\n");
+                //grid.PrintGrid(agents);
 
-                Thread.Sleep(100);
+                //Thread.Sleep(100);
 
                 if (currInfected == 0)
                 {
@@ -151,9 +132,12 @@ namespace Epidemy_Evolution_Optimalizer
                 }
             }
 
-            foreach (Agent agent in agents) { totalInfected += agent.beenInfected ? 1 : 0; }
+            foreach (Agent agent in agents) {
+                totalInfected += agent.beenInfected ? 1 : 0;
+                totalDead += agent.Status == SIR.Dead ? 1 : 0;
+            }
 
-            SimulationResult result = new SimulationResult(totalInfected, maxInfected, lockdownDuration);
+            SimulationResult result = new SimulationResult(totalInfected, maxInfected, totalDead, epidemyDuration, lockdownDuration);
             Console.WriteLine(result.ToString());
 
             return maxInfected;
