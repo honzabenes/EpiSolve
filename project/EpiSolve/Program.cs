@@ -35,8 +35,8 @@ namespace EpiSolve
 
             MeasuresStrategy strategy = new MeasuresStrategy
                 (
-                lockdownStartThreshold: 0.3,
-                lockdownEndThreshold: 0.05,
+                lockdownStartThreshold: 20,
+                lockdownEndThreshold: 5,
                 lockdownReductionFactor: 0.5,
                 lockdownMovementRestriction: 0.5
                 );
