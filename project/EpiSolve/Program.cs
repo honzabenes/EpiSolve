@@ -14,6 +14,34 @@ namespace EpiSolve
         static void Main(string[] args)
         {
             // configurable values
+            SimulationParameters simParams = new SimulationParameters
+                (
+                grid: new GridMap(100, 100),
+                agentsCount: 300,
+                simulationTime: 1000,
+
+                moderateRiskRate: 0.3,
+                highRiskRate: 0.8,
+
+                minRecoveryTime: 50,
+                recoveryRate: 0.8,
+                minImunityTime: 5,
+                imunityLossRate: 0.8,
+                deathProbability: 0.001,
+
+                childWeakerImunityFactor: 0.85,
+                elderWeakerImunityFactor: 0.85
+                );
+
+            MeasuresStrategy strategy = new MeasuresStrategy
+                (
+                lockdownStartThreshold: 0.3,
+                lockdownEndThreshold: 0.05,
+                lockdownReductionFactor: 0.5,
+                lockdownMovementRestriction: 0.5
+                );
+
+
             GridMap grid = new GridMap(100, 100);
             int agentsCount = 300;
             int simulationTime = 2000;
@@ -36,14 +64,7 @@ namespace EpiSolve
             double lockdownMovementRestricion = 0.5;
 
 
-            Simulation.Simulate(grid, agentsCount, simulationTime,
-                                highRiskRate, moderateRiskRate,
-                                minRecoveryTime, recoveryRate,
-                                minImunityTime, imunityLossRate,
-                                deathProability,
-                                childWeakerImunityFactor, elderWeakerImunityFactor,
-                                lockdownStartThreshold, lockdownEndThreshold,
-                                lockdownReductionFactor, lockdownMovementRestricion);
+            Simulation.Simulate(simParams, strategy);
         }
     }
 }

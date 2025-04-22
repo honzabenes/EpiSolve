@@ -1,0 +1,15 @@
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.AssemblyInfoInputs.cache
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.AssemblyInfo.cs
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.csproj.CoreCompileInputs.cache
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.sourcelink.json
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\bin\Debug\net8.0\EpiSolve.exe
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\bin\Debug\net8.0\EpiSolve.deps.json
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\bin\Debug\net8.0\EpiSolve.runtimeconfig.json
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\bin\Debug\net8.0\EpiSolve.dll
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\bin\Debug\net8.0\EpiSolve.pdb
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.dll
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\refint\EpiSolve.dll
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.pdb
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\EpiSolve.genruntimeconfig.cache
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\Epidemy-Evolution-Optimalizer\project\EpiSolve\obj\Debug\net8.0\ref\EpiSolve.dll
