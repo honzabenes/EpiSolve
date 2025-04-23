@@ -18,19 +18,18 @@ namespace EpiSolve
         public double RecoveryRate { get; set; }
         public int MinImunityTime { get; set; }
         public double ImunityLossRate { get; set; }
-        public double DeathProbability { get; set; }
+        public double DeathRate { get; set; }
         public double ChildWeakerImunityFactor { get; set; }
         public double ElderWeakerImunityFactor { get; set; }
 
 
-        public SimulationParameters(GridMap grid, int agentsCount, int simulationTime,
+        public SimulationParameters(int agentsCount, int simulationTime,
                                    double highRiskRate, double moderateRiskRate,
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLossRate,
-                                   double deathProbability,
+                                   double deathRate,
                                    double childWeakerImunityFactor, double elderWeakerImunityFactor)
         {
-            this.Grid = grid;
             this.AgentsCount = agentsCount;
             this.SimulationTime = simulationTime;
             this.ModerateRiskRate = moderateRiskRate;
@@ -39,9 +38,9 @@ namespace EpiSolve
             this.RecoveryRate = recoveryRate;
             this.MinImunityTime = minImunityTime;
             this.ImunityLossRate = imunityLossRate;
-            this.DeathProbability = deathProbability;
+            this.DeathRate = deathRate;
             this.ChildWeakerImunityFactor = childWeakerImunityFactor;
-            this.ElderWeakerImunityFactor = deathProbability;
+            this.ElderWeakerImunityFactor = deathRate;
         }
     }
 }

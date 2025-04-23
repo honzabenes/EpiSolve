@@ -55,10 +55,10 @@ namespace EpiSolve
         }
 
 
-        public static int Simulate(SimulationParameters simParams, MeasuresStrategy strategy)
+        public static int Simulate(GridMap grid, SimulationParameters simParams, MeasuresStrategy strategy)
         {
             Random random = new Random();
-            Agent[] agents = InitAgents(simParams.Grid, simParams.AgentsCount, random);
+            Agent[] agents = InitAgents(grid, simParams.AgentsCount, random);
 
             // time
             int epidemyDuration = simParams.SimulationTime;
@@ -80,10 +80,10 @@ namespace EpiSolve
 
                 foreach (Agent agent in agents)
                 {
-                    agent.Move(simParams.Grid, isLockdown, strategy.LockdownMovementRestriction, random);
+                    agent.Move(grid, isLockdown, strategy.LockdownMovementRestriction, random);
                     agent.TryRecover(simParams.MinRecoveryTime, time, simParams.RecoveryRate, random);
                     agent.TryLoseImunity(simParams.MinImunityTime, time, simParams.ImunityLossRate, random);
-                    agent.TryDie(simParams.DeathProbability, simParams.ChildWeakerImunityFactor,
+                    agent.TryDie(simParams.DeathRate, simParams.ChildWeakerImunityFactor,
                                  simParams.ElderWeakerImunityFactor, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
                 }

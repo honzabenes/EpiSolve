@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\Epidemy-Evolution-Optimalizer\\project\\EpiSolve\\EpiSolve.csproj",
+      "projectUniqueName": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\EpiSolve\\project\\EpiSolve\\EpiSolve.csproj",
       "projectName": "EpiSolve",
-      "projectPath": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\Epidemy-Evolution-Optimalizer\\project\\EpiSolve\\EpiSolve.csproj",
+      "projectPath": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\EpiSolve\\project\\EpiSolve\\EpiSolve.csproj",
       "packagesPath": "C:\\Users\\jenda\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\Epidemy-Evolution-Optimalizer\\project\\EpiSolve\\obj\\",
+      "outputPath": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\EpiSolve\\project\\EpiSolve\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

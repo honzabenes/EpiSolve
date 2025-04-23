@@ -18,10 +18,15 @@ namespace EpiSolve
         private List<Individual> _population;
         private Random _random;
 
-        private class Individual : IComparable<Individual>
+        class Individual : IComparable<Individual>
         {
-            public MeasuresStrategy strategy;
+            public MeasuresStrategy Strategy;
             public double FitnessScore = double.MinValue;
+
+            public Individual(MeasuresStrategy strategy)
+            {
+                this.Strategy = strategy;
+            }
 
             public int CompareTo(Individual other)
             {
@@ -46,6 +51,18 @@ namespace EpiSolve
 
             _population = new List<Individual>(populationSize);
             _random = new Random();
+        }
+
+
+        private void InitializePopulation()
+        {
+            _population.Clear();
+
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                MeasuresStrategy strategy = new MeasuresStrategy(_random);
+                _population.Add(new Individual(strategy));
+            }
         }
     }
 }
