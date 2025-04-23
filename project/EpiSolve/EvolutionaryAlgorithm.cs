@@ -139,5 +139,26 @@ namespace EpiSolve
         {
             return (num1 + num2) / 2.0;
         }
+
+
+        private Individual Mutate(Individual individual)
+        {
+            if (_random.NextDouble() < MutationRate)
+            {
+                MeasuresStrategy strategy = individual.Strategy.Clone();
+
+                double randomDouble = _random.NextDouble();
+                strategy.LockdownStartThreshold *= randomDouble;
+                strategy.LockdownEndThreshold *= randomDouble;
+
+                strategy.LockdownInfectionReductionFactor *= _random.NextDouble();
+                strategy.LockdownMovementRestriction *= _random.NextDouble();
+
+                Individual mutatedIndivdual = new Individual(strategy);
+
+                return mutatedIndivdual;
+            }
+            else return individual;
+        }
     }
 }
