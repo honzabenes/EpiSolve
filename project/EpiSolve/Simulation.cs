@@ -55,7 +55,7 @@ namespace EpiSolve
         }
 
 
-        public static int Simulate(GridMap grid, SimulationParameters simParams, MeasuresStrategy strategy)
+        public static SimulationResult Simulate(GridMap grid, MeasuresStrategy strategy, SimulationParameters simParams)
         {
             Random random = new Random();
             Agent[] agents = InitAgents(grid, simParams.AgentsCount, random);
@@ -138,9 +138,9 @@ namespace EpiSolve
             SimulationResult result = new SimulationResult(totalInfected, maxInfected,
                                                            totalDead, epidemyDuration,
                                                            lockdownDuration);
-            Console.WriteLine(result.ToString());
+            //Console.WriteLine(result.ToString());
 
-            return maxInfected;
+            return result;
         }
     }
 }

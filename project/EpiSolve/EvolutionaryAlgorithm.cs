@@ -14,7 +14,9 @@ namespace EpiSolve
         public double CrossoverRate;
         public int TournamentSize;
         public int ElitismCount;
+        public SimulationParameters SimParams;
 
+        private GridMap _grid { get; set; }
         private List<Individual> _population;
         private Random _random;
 
@@ -49,6 +51,24 @@ namespace EpiSolve
             TournamentSize = tournamentSize;
             ElitismCount = elitismCount;
 
+            SimParams = new SimulationParameters
+                (
+                agentsCount: 300,
+                simulationTime: 1000,
+
+                moderateRiskRate: 0.3,
+                highRiskRate: 0.8,
+
+                minRecoveryTime: 50,
+                recoveryRate: 0.8,
+                minImunityTime: 5,
+                imunityLossRate: 0.8,
+                deathRate: 0.001,
+
+                childWeakerImunityFactor: 0.85,
+                elderWeakerImunityFactor: 0.85
+                );
+
             _population = new List<Individual>(populationSize);
             _random = new Random();
         }
@@ -62,6 +82,16 @@ namespace EpiSolve
             {
                 MeasuresStrategy strategy = new MeasuresStrategy(_random);
                 _population.Add(new Individual(strategy));
+            }
+        }
+
+
+        private void EvaluatePopulation()
+        {
+            foreach (Individual individual in _population)
+            {
+                SimulationResult simRes = Simulation.Simulate(_grid, individual.Strategy, SimParams);
+                individual.FitnessScore = FitnessCalculator.GetFitness(simRes, individual.Strategy, SimParams);
             }
         }
     }
