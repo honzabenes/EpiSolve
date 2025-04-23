@@ -10,12 +10,12 @@ namespace EpiSolve
     {
         public double LockdownStartThreshold { get; set; }
         public double LockdownEndThreshold { get; set; }
-        public double LockdownReductionFactor { get; set; }
+        public double LockdownInfectionReductionFactor { get; set; }
         public double LockdownMovementRestriction { get; set; }
 
         public MeasuresStrategy(Random random)
         {
-            this.LockdownReductionFactor = random.NextDouble();
+            this.LockdownInfectionReductionFactor = random.NextDouble();
             this.LockdownStartThreshold = random.NextDouble();
             do
             {
@@ -26,11 +26,11 @@ namespace EpiSolve
 
 
         public MeasuresStrategy(double lockdownStartThreshold, double lockdownEndThreshold,
-                                double lockdownReductionFactor, double lockdownMovementRestriction)
+                                double lockdownInfectionReductionFactor, double lockdownMovementRestriction)
         {
             this.LockdownStartThreshold = lockdownStartThreshold;
             this.LockdownEndThreshold = lockdownEndThreshold;
-            this.LockdownReductionFactor = lockdownReductionFactor;
+            this.LockdownInfectionReductionFactor = lockdownInfectionReductionFactor;
             this.LockdownMovementRestriction = lockdownMovementRestriction;
         }
 
@@ -38,7 +38,7 @@ namespace EpiSolve
         public MeasuresStrategy Clone()
         {
             return new MeasuresStrategy(this.LockdownStartThreshold, this.LockdownEndThreshold,
-                                        this.LockdownReductionFactor, this.LockdownMovementRestriction);
+                                        this.LockdownInfectionReductionFactor, this.LockdownMovementRestriction);
         }
     }
 }

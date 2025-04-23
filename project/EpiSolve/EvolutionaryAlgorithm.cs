@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -112,6 +113,31 @@ namespace EpiSolve
             }
 
             return bestIndividual;
+        }
+
+
+        private Individual Crossover(Individual parent1, Individual parent2)
+        {
+            MeasuresStrategy strategy1 = parent1.Strategy;
+            MeasuresStrategy strategy2 = parent2.Strategy;
+
+            double lockdownStartThreshold = Average(strategy1.LockdownStartThreshold, strategy2.LockdownStartThreshold);
+            double lockdownEndThreshold = Average(strategy1.LockdownEndThreshold, strategy2.LockdownEndThreshold);
+            double lockdownInfectionReductionFactor = Average(strategy1.LockdownInfectionReductionFactor, strategy2.LockdownInfectionReductionFactor);
+            double lockdownMovementRestriction = Average(strategy1.LockdownMovementRestriction, strategy2.LockdownMovementRestriction);
+
+            MeasuresStrategy childStrategy = new MeasuresStrategy(lockdownStartThreshold, lockdownEndThreshold, 
+                                                          lockdownInfectionReductionFactor, lockdownMovementRestriction);
+
+            Individual child = new Individual(childStrategy);
+
+            return child;
+        }
+
+
+        private double Average(double num1, double num2)
+        {
+            return (num1 + num2) / 2.0;
         }
     }
 }

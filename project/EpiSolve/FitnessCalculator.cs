@@ -20,7 +20,7 @@ namespace EpiSolve
             // strategy metrics
             double lockdownStartThreshold = strategy.LockdownStartThreshold;
             double lockdownEndThreshold = strategy.LockdownEndThreshold;
-            double lockdownReductionFactor = strategy.LockdownReductionFactor;
+            double lockdownReductionFactor = strategy.LockdownInfectionReductionFactor;
             double lockdownMovementRestriction = strategy.LockdownMovementRestriction;
 
             // simulation parameters

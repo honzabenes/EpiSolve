@@ -92,7 +92,7 @@ namespace EpiSolve
                     agent.TryInfect(agents, time, isLockdown,
                                     simParams.HighRiskRate, simParams.ModerateRiskRate,
                                     simParams.ChildWeakerImunityFactor, simParams.ElderWeakerImunityFactor,
-                                    strategy.LockdownReductionFactor,
+                                    strategy.LockdownInfectionReductionFactor,
                                     random);
 
                     if (agent.Status == SIR.Infected) currInfected++;
@@ -138,7 +138,7 @@ namespace EpiSolve
             SimulationResult result = new SimulationResult(totalInfected, maxInfected,
                                                            totalDead, epidemyDuration,
                                                            lockdownDuration);
-            //Console.WriteLine(result.ToString());
+            Console.WriteLine(result.ToString());
 
             return result;
         }
