@@ -94,5 +94,24 @@ namespace EpiSolve
                 individual.FitnessScore = FitnessCalculator.GetFitness(simRes, individual.Strategy, SimParams);
             }
         }
+
+
+        private Individual SelectParentTournament()
+        {
+            Individual? bestIndividual = null;
+
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                int randomIndex = _random.Next(PopulationSize);
+                Individual candidate = _population[randomIndex];
+
+                if (bestIndividual == null || candidate.FitnessScore < bestIndividual.FitnessScore)
+                {
+                    bestIndividual = candidate;
+                }
+            }
+
+            return bestIndividual;
+        }
     }
 }
