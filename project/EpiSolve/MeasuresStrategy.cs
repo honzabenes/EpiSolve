@@ -40,5 +40,17 @@ namespace EpiSolve
             return new MeasuresStrategy(this.LockdownStartThreshold, this.LockdownEndThreshold,
                                         this.LockdownInfectionReductionFactor, this.LockdownMovementRestriction);
         }
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Lockdown start threshold: {LockdownStartThreshold}");
+            sb.AppendLine($"Lockdown end threshold: {LockdownEndThreshold}");
+            sb.AppendLine($"Lockdown infection reduction factor: {LockdownInfectionReductionFactor}");
+            sb.AppendLine($"Lockdown movement restriction: {LockdownMovementRestriction}");
+
+            return sb.ToString();
+        }
     }
 }

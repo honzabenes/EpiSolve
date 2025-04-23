@@ -16,8 +16,8 @@ namespace EpiSolve
         public int TournamentSize;
         public int ElitismCount;
         public SimulationParameters SimParams;
+        public GridMap Grid { get; set; }
 
-        private GridMap _grid { get; set; }
         private List<Individual> _population;
         private Random _random;
 
@@ -43,7 +43,8 @@ namespace EpiSolve
             double mutationRate,
             double crossoverRate,
             int tournamentSize,
-            int elitismCount)
+            int elitismCount,
+            SimulationParameters simParams)
         {
             PopulationSize = populationSize;
             MaxGenerations = maxGenerations;
@@ -52,31 +53,41 @@ namespace EpiSolve
             TournamentSize = tournamentSize;
             ElitismCount = elitismCount;
 
-            SimParams = new SimulationParameters
-                (
-                agentsCount: 300,
-                simulationTime: 1000,
-
-                moderateRiskRate: 0.3,
-                highRiskRate: 0.8,
-
-                minRecoveryTime: 50,
-                recoveryRate: 0.8,
-                minImunityTime: 5,
-                imunityLossRate: 0.8,
-                deathRate: 0.001,
-
-                childWeakerImunityFactor: 0.85,
-                elderWeakerImunityFactor: 0.85
-                );
+            SimParams = simParams;
 
             _population = new List<Individual>(populationSize);
             _random = new Random();
         }
 
 
+        public MeasuresStrategy FindBestStrategy()
+        {
+            InitializePopulation();
+            EvaluatePopulation();
+
+            for (int i =  0; i < MaxGenerations; i++)
+            {
+                List<Individual> nextGeneration = CreateNextGeneration();
+                _population = nextGeneration;
+                EvaluatePopulation();
+            }
+
+            _population.Sort();
+
+            MeasuresStrategy bestStrategy = _population[0].Strategy;
+
+            Console.WriteLine("Evolution finished.\n");
+            Console.WriteLine($"Best found strategy: {bestStrategy.ToString()}");
+
+            Simulation.Simulate(bestStrategy, SimParams);
+
+            return bestStrategy;
+        }
+
+
         private List<Individual> CreateNextGeneration()
         {
+            _population.Sort();
             List<Individual> newPopulation = new List<Individual>(PopulationSize);
 
             for (int i = 0; i < ElitismCount; i++)
@@ -95,7 +106,7 @@ namespace EpiSolve
 
                 child = Mutate(child);
 
-                _population.Add(child);
+                newPopulation.Add(child);
             }
 
             return newPopulation;
@@ -118,7 +129,7 @@ namespace EpiSolve
         {
             foreach (Individual individual in _population)
             {
-                SimulationResult simRes = Simulation.Simulate(_grid, individual.Strategy, SimParams);
+                SimulationResult simRes = Simulation.Simulate(individual.Strategy, SimParams);
                 individual.FitnessScore = FitnessCalculator.GetFitness(simRes, individual.Strategy, SimParams);
             }
         }

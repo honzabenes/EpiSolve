@@ -23,13 +23,14 @@ namespace EpiSolve
         public double ElderWeakerImunityFactor { get; set; }
 
 
-        public SimulationParameters(int agentsCount, int simulationTime,
+        public SimulationParameters(GridMap grid, int agentsCount, int simulationTime,
                                    double highRiskRate, double moderateRiskRate,
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLossRate,
                                    double deathRate,
                                    double childWeakerImunityFactor, double elderWeakerImunityFactor)
         {
+            this.Grid = grid;
             this.AgentsCount = agentsCount;
             this.SimulationTime = simulationTime;
             this.ModerateRiskRate = moderateRiskRate;

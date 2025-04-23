@@ -1,5 +1,4 @@
-﻿using EpiSolve;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,19 +8,25 @@ using System.Threading.Tasks;
 
 namespace EpiSolve
 {
-
     class Program
     {
         static void Main(string[] args)
         {
-            GridMap grid = new GridMap(100, 100);
-
-
             // configurable values
+            GridMap grid = new GridMap(10, 10);
+
+            int populationSize = 10;
+            int maxGenerations = 30;
+            double mutationRate = 0.05;
+            double crossoverRate = 1.0;
+            int tournamentSize = 2;
+            int elitismCount = 1;
+
             SimulationParameters simParams = new SimulationParameters
                 (
-                agentsCount: 300,
-                simulationTime: 1000,
+                grid: grid,
+                agentsCount: 20,
+                simulationTime: 100,
 
                 moderateRiskRate: 0.3,
                 highRiskRate: 0.8,
@@ -36,19 +41,21 @@ namespace EpiSolve
                 elderWeakerImunityFactor: 0.85
                 );
 
-            MeasuresStrategy strategy = new MeasuresStrategy
+            EA ea = new EA
                 (
-                lockdownStartThreshold: 0.3,
-                lockdownEndThreshold: 0.05,
-                lockdownInfectionReductionFactor: 0.5,
-                lockdownMovementRestriction: 0.5
+                populationSize,
+                maxGenerations,
+                mutationRate,
+                crossoverRate,
+                tournamentSize,
+                elitismCount,
+                simParams
                 );
-
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            Simulation.Simulate(grid, strategy, simParams);
+            ea.FindBestStrategy();
 
             sw.Stop();
             Console.WriteLine($"Elapsed Time: {sw.Elapsed.TotalSeconds} s");
