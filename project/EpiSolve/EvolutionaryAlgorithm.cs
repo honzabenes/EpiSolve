@@ -75,6 +75,33 @@ namespace EpiSolve
         }
 
 
+        private List<Individual> CreateNextGeneration()
+        {
+            List<Individual> newPopulation = new List<Individual>(PopulationSize);
+
+            for (int i = 0; i < ElitismCount; i++)
+            {
+                MeasuresStrategy eliteStrategy = _population[i].Strategy.Clone();
+                Individual eliteIndividual = new Individual(eliteStrategy);
+                newPopulation.Add(eliteIndividual);
+            }
+
+            while (newPopulation.Count < PopulationSize)
+            {
+                Individual parent1 = SelectParentTournament();
+                Individual parent2 = SelectParentTournament();
+
+                Individual child = Crossover(parent1, parent2);
+
+                child = Mutate(child);
+
+                _population.Add(child);
+            }
+
+            return newPopulation;
+        }
+
+
         private void InitializePopulation()
         {
             _population.Clear();
@@ -135,9 +162,12 @@ namespace EpiSolve
         }
 
 
-        private double Average(double num1, double num2)
+        private double Average(params double[] numbers)
         {
-            return (num1 + num2) / 2.0;
+            double sum = 0;
+            foreach (double num in numbers) { sum += num; }
+
+            return sum / numbers.Length;
         }
 
 
