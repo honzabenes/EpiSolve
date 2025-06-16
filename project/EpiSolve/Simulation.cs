@@ -50,9 +50,9 @@ namespace EpiSolve
         }
 
 
-        public static SimulationResult Simulate(MeasuresStrategy strategy, SimulationParameters simParams, bool visualise = false)
+        public static SimulationResult Simulate(MeasuresStrategy strategy, SimulationParameters simParams, int seed, bool visualise = false)
         {
-            Random random = new Random();
+            Random random = new Random(seed);
             Agent[] agents = InitAgents(simParams.Grid, simParams.AgentsCount, random);
             Dictionary<(int, int), List<Agent>> agentsPositions = new Dictionary<(int, int), List<Agent>>();
             

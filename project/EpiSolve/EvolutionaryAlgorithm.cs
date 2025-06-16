@@ -1,4 +1,5 @@
-﻿
+﻿using System.Threading.Tasks;
+
 namespace EpiSolve
 {
     class EA
@@ -73,7 +74,14 @@ namespace EpiSolve
             _population.Sort();
 
             MeasuresStrategy bestStrategy = _population[0].Strategy;
-            SimulationResult bestResult = Simulation.Simulate(bestStrategy, SimParams, true);
+
+            int finalDisplaySeed;
+            lock (_random)
+            {
+                finalDisplaySeed = _random.Next();
+            }
+             SimulationResult bestResult = Simulation.Simulate(bestStrategy, SimParams, finalDisplaySeed, true);
+
             Console.WriteLine("Evolution finished.\n");
             Console.WriteLine($"Best found strategy:\n{bestStrategy.ToString()}");
             Console.WriteLine($"The result: {bestResult.ToString()}");
@@ -87,6 +95,12 @@ namespace EpiSolve
         {
             _population.Sort();
             List<Individual> newPopulation = new List<Individual>(PopulationSize);
+
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    MeasuresStrategy strategy = new MeasuresStrategy(_random);
+            //    newPopulation.Add(new Individual(strategy));
+            //}
 
             for (int i = 0; i < ElitismCount; i++)
             {
@@ -127,27 +141,24 @@ namespace EpiSolve
         {
             int numberOfRunsPerIndividual = 5;
 
-            foreach (Individual individual in _population)
+            Parallel.ForEach(_population, individual =>
             {
                 List<SimulationResult> runResults = new List<SimulationResult>();
+
                 for (int i = 0; i < numberOfRunsPerIndividual; i++)
                 {
-                    runResults.Add(Simulation.Simulate(individual.Strategy, SimParams));
+                    int runSeed;
+                    lock (_random)
+                    {
+                        runSeed = _random.Next();
+                    }
+                    runResults.Add(Simulation.Simulate(individual.Strategy, SimParams, runSeed));
                 }
 
                 SimulationResult averagedResult = AverageSimulationResults(runResults);
                 individual.FitnessScore = FitnessCalculator.GetFitness(averagedResult, individual.Strategy, SimParams);
-
-
-                // CONTROL PRINT
-                //if (true)
-                //{
-                //    Console.WriteLine(individual.FitnessScore);
-                //    Console.WriteLine();
-                //}
-            }
-            this._print = false;
-
+                Console.WriteLine(individual.FitnessScore);
+            });
         }
 
 
@@ -233,12 +244,13 @@ namespace EpiSolve
             {
                 MeasuresStrategy strategy = individual.Strategy.Clone();
 
-                double randomDouble = _random.NextDouble();
-                strategy.LockdownStartThreshold *= randomDouble;
-                strategy.LockdownEndThreshold *= randomDouble;
+                double randomStartThreshold = _random.NextDouble();
+                strategy.LockdownStartThreshold = randomStartThreshold;
+                double randomEndThreshold = _random.NextDouble();
+                strategy.LockdownEndThreshold = randomStartThreshold - randomEndThreshold;
 
-                strategy.LockdownInfectionReductionFactor *= _random.NextDouble();
-                strategy.LockdownMovementRestriction *= _random.NextDouble();
+                strategy.LockdownInfectionReductionFactor = _random.NextDouble();
+                strategy.LockdownMovementRestriction = _random.NextDouble();
 
                 Individual mutatedIndivdual = new Individual(strategy);
 

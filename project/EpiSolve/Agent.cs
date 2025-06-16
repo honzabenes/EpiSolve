@@ -109,22 +109,6 @@ namespace EpiSolve
             int numberOfModerateRiskNeighbors = 0;
             int numberOfHighRiskNeighbors = 0;
 
-            //int[] infectionRange = { -1, 0, 1 };
-
-            //List<Agent> agentsAtRisk = new List<Agent>();
-            //List<GridPosition> tilesAtRisk = GetTilesInRange(grid, infectionRange);
-
-            //foreach (GridPosition tile in tilesAtRisk)
-            //{
-            //    if (AgentPositions.ContainsKey((tile.X, tile.Y)))
-            //    {
-            //        foreach (Agent agent in AgentPositions[(tile.X, tile.Y)])
-            //        {
-            //            agentsAtRisk.Add(agent);
-            //        }
-            //    }
-            //}
-
             foreach (Agent otherAgent in agents)
             {
                 if (otherAgent == this) continue;

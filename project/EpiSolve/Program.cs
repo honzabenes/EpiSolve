@@ -8,7 +8,7 @@ namespace EpiSolve
         {
             // configurable values
             int populationSize = 100;
-            int maxGenerations = 30;
+            int maxGenerations = 100;
             double mutationRate = 0.05;
             double crossoverRate = 1.0;
             int tournamentSize = 20;
@@ -18,15 +18,15 @@ namespace EpiSolve
                 (
                 gridHeight: 10,
                 gridWidth: 10,
-                agentsCount: 25,
-                simulationTime: 50,
+                agentsCount: 35,
+                simulationTime: 100,
 
                 moderateRiskRate: 0.3,
                 highRiskRate: 0.8,
 
                 minRecoveryTime: 10,
                 recoveryRate: 0.8,
-                minImunityTime: 5,
+                minImunityTime: 10,
                 imunityLossRate: 0.8,
                 deathRate: 0.001,
 

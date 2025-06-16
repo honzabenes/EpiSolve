@@ -34,7 +34,7 @@ namespace EpiSolve
 
 
             // weights
-            double wTotalDead = 0.9;
+            double wTotalDead = 0.8;
             double wMaxInfected = 0.3;
             double wLockdown = 0.4;
             double wTotalInfected = 0.05;
@@ -57,12 +57,15 @@ namespace EpiSolve
                 penalty += nonsensePenalty;
             }
 
-
             if (totalDead > 0.01)
             {
                 penalty += nonsensePenalty;
             }
 
+            //if (lockdownMovementRestriction > 0.9)
+            //{
+            //    penalty += nonsensePenalty;
+            //}
 
             if (strategy.LockdownInfectionReductionFactor < 0.2)
             {
@@ -70,25 +73,25 @@ namespace EpiSolve
             }
 
             // Penalizace za příliš striktní redukci infekce
-            if (strategy.LockdownInfectionReductionFactor < 0.1) // méně než 10% původní šance
+            if (strategy.LockdownInfectionReductionFactor < 0.3)
             {
-                penalty += (0.1 - strategy.LockdownInfectionReductionFactor) * penaltyFactor;
+                penalty += (0.3 - strategy.LockdownInfectionReductionFactor) * penaltyFactor;
             }
             // Penalizace za příliš striktní omezení pohybu
-            if (strategy.LockdownMovementRestriction > 0.9) // více než 90% omezení
+            if (strategy.LockdownMovementRestriction > 0.75)
             {
-                penalty += (strategy.LockdownMovementRestriction - 0.9) * penaltyFactor;
+                penalty += (strategy.LockdownMovementRestriction - 0.75) * penaltyFactor;
             }
 
             // Penalizace za pozdní start lockdownu
-            if (strategy.LockdownStartThreshold > 0.3) // Začíná až při 50% nakažených
+            if (strategy.LockdownStartThreshold > 0.3)
             {
                 penalty += (strategy.LockdownStartThreshold - 0.3) * penaltyFactor;
             }
             // Penalizace za příliš brzké ukončení lockdownu
-            if (strategy.LockdownEndThreshold < 0.02)
+            if (strategy.LockdownEndThreshold < 0.1)
             {
-                penalty += (0.02 - strategy.LockdownEndThreshold) * penaltyFactor;
+                penalty += (0.1 - strategy.LockdownEndThreshold) * penaltyFactor;
             }
 
 
