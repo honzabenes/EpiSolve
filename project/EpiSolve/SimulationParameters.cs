@@ -4,6 +4,8 @@ namespace EpiSolve
     class SimulationParameters
     {
         public GridMap Grid { get; set; }
+        public int GridHeight { get; set; }
+        public int GridWidth { get; set; }
         public int AgentsCount { get; set; }
         public int SimulationTime { get; set; }
         public double ModerateRiskRate { get; set; }
@@ -17,14 +19,16 @@ namespace EpiSolve
         public double ElderWeakerImunityFactor { get; set; }
 
 
-        public SimulationParameters(GridMap grid, int agentsCount, int simulationTime,
+        public SimulationParameters(int gridHeight, int gridWidth, int agentsCount, int simulationTime,
                                    double highRiskRate, double moderateRiskRate,
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLossRate,
                                    double deathRate,
                                    double childWeakerImunityFactor, double elderWeakerImunityFactor)
         {
-            this.Grid = grid;
+            this.Grid = new GridMap(gridHeight, gridWidth);
+            this.GridHeight = gridHeight;
+            this.GridWidth = gridWidth;
             this.AgentsCount = agentsCount;
             this.SimulationTime = simulationTime;
             this.ModerateRiskRate = moderateRiskRate;
@@ -35,7 +39,7 @@ namespace EpiSolve
             this.ImunityLossRate = imunityLossRate;
             this.DeathRate = deathRate;
             this.ChildWeakerImunityFactor = childWeakerImunityFactor;
-            this.ElderWeakerImunityFactor = deathRate;
+            this.ElderWeakerImunityFactor = elderWeakerImunityFactor;
         }
     }
 }

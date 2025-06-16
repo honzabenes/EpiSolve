@@ -41,10 +41,10 @@ namespace EpiSolve
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Lockdown start threshold: {LockdownStartThreshold}");
-            sb.AppendLine($"Lockdown end threshold: {LockdownEndThreshold}");
-            sb.AppendLine($"Lockdown infection reduction factor: {LockdownInfectionReductionFactor}");
-            sb.AppendLine($"Lockdown movement restriction: {LockdownMovementRestriction}");
+            sb.AppendLine($"Lockdown start threshold: {LockdownStartThreshold:F2}");
+            sb.AppendLine($"Lockdown end threshold: {LockdownEndThreshold:F2}");
+            sb.AppendLine($"Lockdown infection reduction factor: {LockdownInfectionReductionFactor:F2}");
+            sb.AppendLine($"Lockdown movement restriction: {LockdownMovementRestriction:F2}");
 
             return sb.ToString();
         }

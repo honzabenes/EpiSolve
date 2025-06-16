@@ -24,7 +24,7 @@ namespace EpiSolve
         }
 
 
-        public List<GridPosition> GetPossibleMoves(GridMap grid, int[] movesRanges)
+        public List<GridPosition> GetTilesInRange(GridMap grid, int[] movesRanges)
         {
             int newX;
             int newY;
@@ -63,7 +63,7 @@ namespace EpiSolve
                 movesRanges = new int[] { -2, -1, 0, 1, 2 };
             }
 
-            List<GridPosition> possibleMoves = GetPossibleMoves(grid, movesRanges);
+            List<GridPosition> possibleMoves = GetTilesInRange(grid, movesRanges);
 
             int randomIndex = random.Next(possibleMoves.Count);
             this.Position = possibleMoves[randomIndex];
@@ -91,7 +91,9 @@ namespace EpiSolve
         }
 
 
-        public void TryInfect(Agent[] agents, int time, bool isLockdown, double highRiskRate, double moderateRiskRate,
+
+        public void TryInfect(Agent[] agents, GridMap grid,
+                              int time, bool isLockdown, double highRiskRate, double moderateRiskRate,
                               double childWeakerImunityFactor, double elderWeakerImunityFactor,
                               double lockdownReductionFactor, Random random)
         {
@@ -106,6 +108,22 @@ namespace EpiSolve
 
             int numberOfModerateRiskNeighbors = 0;
             int numberOfHighRiskNeighbors = 0;
+
+            //int[] infectionRange = { -1, 0, 1 };
+
+            //List<Agent> agentsAtRisk = new List<Agent>();
+            //List<GridPosition> tilesAtRisk = GetTilesInRange(grid, infectionRange);
+
+            //foreach (GridPosition tile in tilesAtRisk)
+            //{
+            //    if (AgentPositions.ContainsKey((tile.X, tile.Y)))
+            //    {
+            //        foreach (Agent agent in AgentPositions[(tile.X, tile.Y)])
+            //        {
+            //            agentsAtRisk.Add(agent);
+            //        }
+            //    }
+            //}
 
             foreach (Agent otherAgent in agents)
             {

@@ -13,6 +13,21 @@ namespace EpiSolve
             this.X = x;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            GridPosition other = (GridPosition)obj;
+            return (this.X == other.X && this.Y == other.Y);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
 
         private bool Equals(GridPosition other)
         {

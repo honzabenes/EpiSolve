@@ -3,6 +3,8 @@ namespace EpiSolve
 {
     class EA
     {
+        public bool _print = false;
+
         public int PopulationSize;
         public int MaxGenerations;
         public double MutationRate;
@@ -27,7 +29,7 @@ namespace EpiSolve
 
             public int CompareTo(Individual other)
             {
-                return other.FitnessScore.CompareTo(this.FitnessScore);
+                return this.FitnessScore.CompareTo(other.FitnessScore);
             }
         }
 
@@ -59,6 +61,8 @@ namespace EpiSolve
             InitializePopulation();
             EvaluatePopulation();
 
+            this._print = true;
+
             for (int i =  0; i < MaxGenerations; i++)
             {
                 List<Individual> nextGeneration = CreateNextGeneration();
@@ -69,11 +73,11 @@ namespace EpiSolve
             _population.Sort();
 
             MeasuresStrategy bestStrategy = _population[0].Strategy;
-
+            SimulationResult bestResult = Simulation.Simulate(bestStrategy, SimParams, true);
             Console.WriteLine("Evolution finished.\n");
-            Console.WriteLine($"Best found strategy: {bestStrategy.ToString()}");
-
-            Simulation.Simulate(bestStrategy, SimParams);
+            Console.WriteLine($"Best found strategy:\n{bestStrategy.ToString()}");
+            Console.WriteLine($"The result: {bestResult.ToString()}");
+            Console.WriteLine($"Fitness: {_population[0].FitnessScore}");
 
             return bestStrategy;
         }
@@ -121,11 +125,58 @@ namespace EpiSolve
 
         private void EvaluatePopulation()
         {
+            int numberOfRunsPerIndividual = 5;
+
             foreach (Individual individual in _population)
             {
-                SimulationResult simRes = Simulation.Simulate(individual.Strategy, SimParams);
-                individual.FitnessScore = FitnessCalculator.GetFitness(simRes, individual.Strategy, SimParams);
+                List<SimulationResult> runResults = new List<SimulationResult>();
+                for (int i = 0; i < numberOfRunsPerIndividual; i++)
+                {
+                    runResults.Add(Simulation.Simulate(individual.Strategy, SimParams));
+                }
+
+                SimulationResult averagedResult = AverageSimulationResults(runResults);
+                individual.FitnessScore = FitnessCalculator.GetFitness(averagedResult, individual.Strategy, SimParams);
+
+
+                // CONTROL PRINT
+                //if (true)
+                //{
+                //    Console.WriteLine(individual.FitnessScore);
+                //    Console.WriteLine();
+                //}
             }
+            this._print = false;
+
+        }
+
+
+        private SimulationResult AverageSimulationResults(List<SimulationResult> results)
+        {
+            // CONTROL PRINT
+            //foreach (SimulationResult result in results)
+            //{
+            //    Console.WriteLine(result.ToString());
+            //}
+
+            double avgTotalInfected = results.Average(r => r.TotalInfected);
+            double avgMaxInfected = results.Average(r => r.MaxInfected);
+            double avgTotalDead = results.Average(r => r.TotalDead);
+            double avgEpidemyDuration = results.Average(r => r.EpidemyDuration);
+            double avgLockdownDuration = results.Average(r => r.LockdownDuration);
+
+            SimulationResult avgResult = new SimulationResult(
+                (int)Math.Round(avgTotalInfected),
+                (int)Math.Round(avgMaxInfected),
+                (int)Math.Round(avgTotalDead),
+                (int)Math.Round(avgEpidemyDuration),
+                (int)Math.Round(avgLockdownDuration)
+            );
+            // CONTROL PRINT
+            //Console.WriteLine($"avg: {avgResult.ToString()}");
+            //Console.WriteLine();
+
+            return avgResult;
         }
 
 
@@ -133,7 +184,7 @@ namespace EpiSolve
         {
             Individual? bestIndividual = null;
 
-            for (int i = 0; i < PopulationSize; i++)
+            for (int i = 0; i < TournamentSize; i++)
             {
                 int randomIndex = _random.Next(PopulationSize);
                 Individual candidate = _population[randomIndex];

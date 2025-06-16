@@ -7,25 +7,24 @@ namespace EpiSolve
         static void Main(string[] args)
         {
             // configurable values
-            GridMap grid = new GridMap(10, 10);
-
-            int populationSize = 10;
+            int populationSize = 100;
             int maxGenerations = 30;
             double mutationRate = 0.05;
             double crossoverRate = 1.0;
-            int tournamentSize = 2;
-            int elitismCount = 1;
+            int tournamentSize = 20;
+            int elitismCount = 5;
 
             SimulationParameters simParams = new SimulationParameters
                 (
-                grid: grid,
-                agentsCount: 20,
-                simulationTime: 100,
+                gridHeight: 10,
+                gridWidth: 10,
+                agentsCount: 25,
+                simulationTime: 50,
 
                 moderateRiskRate: 0.3,
                 highRiskRate: 0.8,
 
-                minRecoveryTime: 50,
+                minRecoveryTime: 10,
                 recoveryRate: 0.8,
                 minImunityTime: 5,
                 imunityLossRate: 0.8,

@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.InteropServices;
+
 namespace EpiSolve
 {
     static class Simulation
@@ -48,21 +50,20 @@ namespace EpiSolve
         }
 
 
-        public static SimulationResult Simulate(MeasuresStrategy strategy, SimulationParameters simParams)
+        public static SimulationResult Simulate(MeasuresStrategy strategy, SimulationParameters simParams, bool visualise = false)
         {
             Random random = new Random();
             Agent[] agents = InitAgents(simParams.Grid, simParams.AgentsCount, random);
+            Dictionary<(int, int), List<Agent>> agentsPositions = new Dictionary<(int, int), List<Agent>>();
+            
 
-            // time
             int epidemyDuration = simParams.SimulationTime;
 
-            // infection metric
             int currInfected;
             int maxInfected = 0;
             int totalInfected = 0;
             int totalDead = 0;
 
-            // lockdown
             bool isLockdown = false;
             int lockdownDuration = 0;
 
@@ -70,6 +71,8 @@ namespace EpiSolve
             for (int time = 1; time < simParams.SimulationTime + 1; time++)
             {
                 currInfected = 0;
+                agentsPositions.Clear();
+
 
                 foreach (Agent agent in agents)
                 {
@@ -80,16 +83,27 @@ namespace EpiSolve
                                  simParams.ElderWeakerImunityFactor, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
                 }
+
                 foreach (Agent agent in agents)
                 {
-                    agent.TryInfect(agents, time, isLockdown,
-                                    simParams.HighRiskRate, simParams.ModerateRiskRate,
+                    if (!agentsPositions.ContainsKey((agent.Position.X, agent.Position.Y)))
+                    {
+                        agentsPositions[(agent.Position.X, agent.Position.Y)] = new List<Agent>();
+                    }
+                    agentsPositions[(agent.Position.X, agent.Position.Y)].Add(agent);
+                }
+
+                foreach (Agent agent in agents)
+                {
+                    agent.TryInfect(agents, simParams.Grid,
+                                    time, isLockdown, simParams.HighRiskRate, simParams.ModerateRiskRate,
                                     simParams.ChildWeakerImunityFactor, simParams.ElderWeakerImunityFactor,
                                     strategy.LockdownInfectionReductionFactor,
                                     random);
 
                     if (agent.Status == SIR.Infected) currInfected++;
                 }
+
 
                 if (currInfected > maxInfected) { maxInfected = currInfected; }
 
@@ -104,16 +118,14 @@ namespace EpiSolve
 
                 if (isLockdown) lockdownDuration++;
 
-                //CONTROL PRINTS
-                //Console.Clear();
-
-                //Console.WriteLine($"Time: {time}");
-                //Console.WriteLine($"Is lockdown: {isLockdown}");
-                //Console.WriteLine($"Infected: {currInfected}");
-                //Console.WriteLine($"Max Infected: {maxInfected}\n");
-                //grid.PrintGrid(agents);
-
-                //Thread.Sleep(100);
+                // VISUAL SIMULATION
+                if (visualise)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Simulation of the best strategy.");
+                    simParams.Grid.PrintGrid(agents);
+                    Thread.Sleep(100);
+                }
 
                 if (currInfected == 0)
                 {
@@ -131,7 +143,7 @@ namespace EpiSolve
             SimulationResult result = new SimulationResult(totalInfected, maxInfected,
                                                            totalDead, epidemyDuration,
                                                            lockdownDuration);
-            Console.WriteLine(result.ToString());
+            //Console.WriteLine(result.ToString());
 
             return result;
         }
