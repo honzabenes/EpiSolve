@@ -9,6 +9,7 @@ namespace EpiSolve
         public int PopulationSize;
         public int MaxGenerations;
         public double MutationRate;
+        public double MutationStrength;
         public double CrossoverRate;
         public int TournamentSize;
         public int ElitismCount;
@@ -38,6 +39,7 @@ namespace EpiSolve
             int populationSize,
             int maxGenerations,
             double mutationRate,
+            double mutationStrength,
             double crossoverRate,
             int tournamentSize,
             int elitismCount,
@@ -46,6 +48,7 @@ namespace EpiSolve
             PopulationSize = populationSize;
             MaxGenerations = maxGenerations;
             MutationRate = mutationRate;
+            MutationStrength = mutationStrength;
             CrossoverRate = crossoverRate;
             TournamentSize = tournamentSize;
             ElitismCount = elitismCount;
@@ -84,7 +87,7 @@ namespace EpiSolve
 
             Console.WriteLine("Evolution finished.\n");
             Console.WriteLine($"Best found strategy:\n{bestStrategy.ToString()}");
-            Console.WriteLine($"The result: {bestResult.ToString()}");
+            Console.WriteLine($"The result:\n{bestResult.ToString()}");
             Console.WriteLine($"Fitness: {_population[0].FitnessScore}");
 
             return bestStrategy;
@@ -139,7 +142,7 @@ namespace EpiSolve
 
         private void EvaluatePopulation()
         {
-            int numberOfRunsPerIndividual = 5;
+            int numberOfRunsPerIndividual = 2;
 
             Parallel.ForEach(_population, individual =>
             {
@@ -240,23 +243,48 @@ namespace EpiSolve
 
         private Individual Mutate(Individual individual)
         {
+            MeasuresStrategy mutatedStrategy = individual.Strategy.Clone(); // Začni s klonem
+
             if (_random.NextDouble() < MutationRate)
             {
-                MeasuresStrategy strategy = individual.Strategy.Clone();
+                // LockdownStartThreshold
+                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                mutatedStrategy.LockdownStartThreshold += change;
+                mutatedStrategy.LockdownStartThreshold = Math.Clamp(mutatedStrategy.LockdownStartThreshold, 0.0, 1.0);
 
-                double randomStartThreshold = _random.NextDouble();
-                strategy.LockdownStartThreshold = randomStartThreshold;
-                double randomEndThreshold = _random.NextDouble();
-                strategy.LockdownEndThreshold = randomStartThreshold - randomEndThreshold;
+                // LockdownEndThreshold
+                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                mutatedStrategy.LockdownEndThreshold += change;
+                mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, 1.0);
 
-                strategy.LockdownInfectionReductionFactor = _random.NextDouble();
-                strategy.LockdownMovementRestriction = _random.NextDouble();
+                // LockdownInfectionReductionFactor
+                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                mutatedStrategy.LockdownInfectionReductionFactor += change;
+                mutatedStrategy.LockdownInfectionReductionFactor = Math.Clamp(mutatedStrategy.LockdownInfectionReductionFactor, 0.0, 1.0);
 
-                Individual mutatedIndivdual = new Individual(strategy);
+                // LockdownMovementRestriction
+                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                mutatedStrategy.LockdownMovementRestriction += change;
+                mutatedStrategy.LockdownMovementRestriction = Math.Clamp(mutatedStrategy.LockdownMovementRestriction, 0.0, 1.0);
 
-                return mutatedIndivdual;
+                if (mutatedStrategy.LockdownStartThreshold <= mutatedStrategy.LockdownEndThreshold)
+                {
+                    if (mutatedStrategy.LockdownStartThreshold > 0.01)
+                    {
+                        mutatedStrategy.LockdownEndThreshold = Math.Max(0.0, mutatedStrategy.LockdownStartThreshold * _random.NextDouble() * 0.9);
+                    }
+                    else
+                    {
+                        mutatedStrategy.LockdownEndThreshold = 0.0;
+                    }
+                    mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, Math.Max(0.0, mutatedStrategy.LockdownStartThreshold - 0.001));
+
+
+                }
+                return new Individual(mutatedStrategy);
             }
-            else return individual;
+
+            return individual;
         }
     }
 }

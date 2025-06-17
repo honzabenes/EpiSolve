@@ -7,12 +7,13 @@ namespace EpiSolve
         static void Main(string[] args)
         {
             // configurable values
-            int populationSize = 100;
+            int populationSize = 500;
             int maxGenerations = 100;
-            double mutationRate = 0.05;
+            double mutationRate = 0.2;
+            double mutationStrength = 0.1;
             double crossoverRate = 1.0;
-            int tournamentSize = 20;
-            int elitismCount = 5;
+            int tournamentSize = 50;
+            int elitismCount = 50;
 
             SimulationParameters simParams = new SimulationParameters
                 (
@@ -26,7 +27,7 @@ namespace EpiSolve
 
                 minRecoveryTime: 10,
                 recoveryRate: 0.8,
-                minImunityTime: 10,
+                minImunityTime: 20,
                 imunityLossRate: 0.8,
                 deathRate: 0.001,
 
@@ -39,6 +40,7 @@ namespace EpiSolve
                 populationSize,
                 maxGenerations,
                 mutationRate,
+                mutationStrength,
                 crossoverRate,
                 tournamentSize,
                 elitismCount,
