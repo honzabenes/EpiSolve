@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using ScottPlot;
+using System.Drawing;
 
 namespace EpiSolve
 {
@@ -17,6 +19,7 @@ namespace EpiSolve
         public GridMap Grid { get; set; }
 
         private List<Individual> _population;
+        private List<double> _bestFitnessPerGeneration;
         private Random _random;
 
         class Individual : IComparable<Individual>
@@ -56,6 +59,7 @@ namespace EpiSolve
             SimParams = simParams;
 
             _population = new List<Individual>(populationSize);
+            _bestFitnessPerGeneration = new List<double>();
             _random = new Random();
         }
 
@@ -64,31 +68,36 @@ namespace EpiSolve
         {
             InitializePopulation();
             EvaluatePopulation();
+            RecordGenerationStats();
 
             this._print = true;
 
-            for (int i =  0; i < MaxGenerations; i++)
+            for (int i = 0; i < MaxGenerations; i++)
             {
                 List<Individual> nextGeneration = CreateNextGeneration();
                 _population = nextGeneration;
                 EvaluatePopulation();
+                RecordGenerationStats();
             }
 
             _population.Sort();
 
             MeasuresStrategy bestStrategy = _population[0].Strategy;
+            double bestOverallFitness = _population[0].FitnessScore;
 
             int finalDisplaySeed;
             lock (_random)
             {
                 finalDisplaySeed = _random.Next();
             }
-             SimulationResult bestResult = Simulation.Simulate(bestStrategy, SimParams, finalDisplaySeed, true);
+            SimulationResult bestResult = Simulation.Simulate(bestStrategy, SimParams, finalDisplaySeed, true);
 
             Console.WriteLine("Evolution finished.\n");
             Console.WriteLine($"Best found strategy:\n{bestStrategy.ToString()}");
             Console.WriteLine($"The result:\n{bestResult.ToString()}");
             Console.WriteLine($"Fitness: {_population[0].FitnessScore}");
+
+            PlotEvolutionGraph();
 
             return bestStrategy;
         }
@@ -142,7 +151,7 @@ namespace EpiSolve
 
         private void EvaluatePopulation()
         {
-            int numberOfRunsPerIndividual = 2;
+            int numberOfRunsPerIndividual = 20;
 
             Parallel.ForEach(_population, individual =>
             {
@@ -223,7 +232,7 @@ namespace EpiSolve
             double lockdownInfectionReductionFactor = Average(strategy1.LockdownInfectionReductionFactor, strategy2.LockdownInfectionReductionFactor);
             double lockdownMovementRestriction = Average(strategy1.LockdownMovementRestriction, strategy2.LockdownMovementRestriction);
 
-            MeasuresStrategy childStrategy = new MeasuresStrategy(lockdownStartThreshold, lockdownEndThreshold, 
+            MeasuresStrategy childStrategy = new MeasuresStrategy(lockdownStartThreshold, lockdownEndThreshold,
                                                           lockdownInfectionReductionFactor, lockdownMovementRestriction);
 
             Individual child = new Individual(childStrategy);
@@ -243,10 +252,13 @@ namespace EpiSolve
 
         private Individual Mutate(Individual individual)
         {
-            MeasuresStrategy mutatedStrategy = individual.Strategy.Clone(); // Začni s klonem
+            MeasuresStrategy mutatedStrategy = individual.Strategy.Clone();
+            bool mutated = false;
 
             if (_random.NextDouble() < MutationRate)
             {
+                mutated = true;
+
                 // LockdownStartThreshold
                 double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 mutatedStrategy.LockdownStartThreshold += change;
@@ -257,16 +269,32 @@ namespace EpiSolve
                 mutatedStrategy.LockdownEndThreshold += change;
                 mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, 1.0);
 
+            }
+
+            if (_random.NextDouble() < MutationRate)
+            {
+                mutated = true;
+
                 // LockdownInfectionReductionFactor
+                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 mutatedStrategy.LockdownInfectionReductionFactor += change;
                 mutatedStrategy.LockdownInfectionReductionFactor = Math.Clamp(mutatedStrategy.LockdownInfectionReductionFactor, 0.0, 1.0);
+            }
+
+            if (_random.NextDouble() < MutationRate)
+            {
+                mutated = true;
 
                 // LockdownMovementRestriction
+                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 mutatedStrategy.LockdownMovementRestriction += change;
                 mutatedStrategy.LockdownMovementRestriction = Math.Clamp(mutatedStrategy.LockdownMovementRestriction, 0.0, 1.0);
+            }
 
+            if (mutated)
+            {
                 if (mutatedStrategy.LockdownStartThreshold <= mutatedStrategy.LockdownEndThreshold)
                 {
                     if (mutatedStrategy.LockdownStartThreshold > 0.01)
@@ -278,13 +306,75 @@ namespace EpiSolve
                         mutatedStrategy.LockdownEndThreshold = 0.0;
                     }
                     mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, Math.Max(0.0, mutatedStrategy.LockdownStartThreshold - 0.001));
-
-
                 }
                 return new Individual(mutatedStrategy);
             }
 
+
             return individual;
+        }
+
+
+        private void RecordGenerationStats()
+        {
+            if (_population.Any())
+            {
+                _population.Sort();
+                _bestFitnessPerGeneration.Add(_population[0].FitnessScore);
+            }
+            else
+            {
+                _bestFitnessPerGeneration.Add(double.NaN);
+            }
+        }
+
+
+
+        private void PlotEvolutionGraph()
+        {
+            if (!_bestFitnessPerGeneration.Any())
+            {
+                Console.WriteLine("No data to plot for evolution graph.");
+                return;
+            }
+
+            var plt = new ScottPlot.Plot();
+
+            double[] generations = Enumerable.Range(0, _bestFitnessPerGeneration.Count)
+                                             .Select(i => (double)i)
+                                             .ToArray();
+
+            double[] bestFitnessData = _bestFitnessPerGeneration.ToArray();
+
+
+            // Přidání křivky nejlepší fitness
+            var bestFitnessLine = plt.Add.Scatter(generations, bestFitnessData);
+            bestFitnessLine.Label = "Best Fitness";
+            bestFitnessLine.Color = ScottPlot.Colors.Blue;
+            bestFitnessLine.LineWidth = 2;
+
+            // Nastavení popisků os a titulku
+            plt.Title("Evolution of Fitness Over Generations");
+
+
+            plt.Axes.Bottom.Label.Text = "Generation";
+            plt.Axes.Left.Label.Text = "Fitness Score (Lower is Better)";
+
+            // Povolení legendy
+            plt.Legend.IsVisible = true;
+            plt.Legend.Location = ScottPlot.Alignment.UpperRight;
+
+            // Uložení grafu jako obrázek
+            string filePath = "evolution_graph.png";
+            try
+            {
+                plt.Save(filePath, 600, 400);
+                Console.WriteLine($"Evolution graph saved to {System.IO.Path.GetFullPath(filePath)}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving graph: {ex.Message}");
+            }
         }
     }
 }

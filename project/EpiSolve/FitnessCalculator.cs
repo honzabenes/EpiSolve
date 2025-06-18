@@ -34,9 +34,9 @@ namespace EpiSolve
 
 
             // weights
-            double wTotalDead = 30;
-            double wMaxInfected = 0.3;
-            double wLockdown = 0.4;
+            double wTotalDead = 0.6;
+            double wMaxInfected = 0.4;
+            double wLockdown = 0.3;
             double wTotalInfected = 0.05;
             double wEpidemyDuration = 0.05;
 
@@ -44,7 +44,7 @@ namespace EpiSolve
             // Penalty
             double penalty = 0.0;
             double penaltyFactor = 1;
-            double nonsensePenalty = 10;
+            double nonsensePenalty = 1;
 
 
             if (lockdownStartThreshold < 0.01)
@@ -57,7 +57,7 @@ namespace EpiSolve
                 penalty += nonsensePenalty;
             }
 
-            if (totalDead > 0.01)
+            if (normTotalDead > 0.01)
             {
                 penalty += nonsensePenalty;
             }
@@ -78,9 +78,9 @@ namespace EpiSolve
                 penalty += (0.3 - strategy.LockdownInfectionReductionFactor) * penaltyFactor;
             }
             // Penalizace za příliš striktní omezení pohybu
-            if (strategy.LockdownMovementRestriction > 0.8)
+            if (strategy.LockdownMovementRestriction > 0.9)
             {
-                penalty += (strategy.LockdownMovementRestriction - 0.8) * penaltyFactor;
+                penalty += (strategy.LockdownMovementRestriction - 0.9) * penaltyFactor;
             }
 
             // Penalizace za pozdní start lockdownu
