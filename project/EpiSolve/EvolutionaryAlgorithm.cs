@@ -20,6 +20,8 @@ namespace EpiSolve
 
         private List<Individual> _population;
         private List<double> _bestFitnessPerGeneration;
+        private List<double> _averageFitnessPerGeneration;
+        private List<double> _worstFitnessPerGeneration;
         private Random _random;
 
         class Individual : IComparable<Individual>
@@ -60,6 +62,8 @@ namespace EpiSolve
 
             _population = new List<Individual>(populationSize);
             _bestFitnessPerGeneration = new List<double>();
+            _averageFitnessPerGeneration = new List<double>();
+            _worstFitnessPerGeneration = new List<double>();
             _random = new Random();
         }
 
@@ -67,23 +71,26 @@ namespace EpiSolve
         public MeasuresStrategy FindBestStrategy()
         {
             InitializePopulation();
-            EvaluatePopulation();
-            RecordGenerationStats();
 
             this._print = true;
 
             for (int i = 0; i < MaxGenerations; i++)
             {
-                List<Individual> nextGeneration = CreateNextGeneration();
-                _population = nextGeneration;
+                Console.WriteLine($"Generation: {i + 1}/{MaxGenerations}"); // CONTROL PRINT
+
                 EvaluatePopulation();
                 RecordGenerationStats();
+                List<Individual> nextGeneration = CreateNextGeneration();
+                _population = nextGeneration;
+
+                Console.Clear();
             }
 
+            EvaluatePopulation();
+            RecordGenerationStats();
             _population.Sort();
 
             MeasuresStrategy bestStrategy = _population[0].Strategy;
-            double bestOverallFitness = _population[0].FitnessScore;
 
             int finalDisplaySeed;
             lock (_random)
@@ -169,7 +176,7 @@ namespace EpiSolve
 
                 SimulationResult averagedResult = AverageSimulationResults(runResults);
                 individual.FitnessScore = FitnessCalculator.GetFitness(averagedResult, individual.Strategy, SimParams);
-                Console.WriteLine(individual.FitnessScore);
+                //Console.WriteLine(individual.FitnessScore);
             });
         }
 
@@ -265,9 +272,10 @@ namespace EpiSolve
                 mutatedStrategy.LockdownStartThreshold = Math.Clamp(mutatedStrategy.LockdownStartThreshold, 0.0, 1.0);
 
                 // LockdownEndThreshold
+                double maxPossibleEndThreshold = Math.Max(0.0, mutatedStrategy.LockdownStartThreshold - 0.001);
                 change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
                 mutatedStrategy.LockdownEndThreshold += change;
-                mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, 1.0);
+                mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, maxPossibleEndThreshold);
 
             }
 
@@ -321,10 +329,21 @@ namespace EpiSolve
             {
                 _population.Sort();
                 _bestFitnessPerGeneration.Add(_population[0].FitnessScore);
+                _worstFitnessPerGeneration.Add(_population[_population.Count - 1].FitnessScore);
+
+                double sumFitness = 0;
+                foreach (Individual ind in _population)
+                {
+                    sumFitness += ind.FitnessScore;
+                }
+
+                _averageFitnessPerGeneration.Add(sumFitness / _population.Count);
             }
             else
             {
                 _bestFitnessPerGeneration.Add(double.NaN);
+                _worstFitnessPerGeneration.Add(double.NaN);
+                _averageFitnessPerGeneration.Add(double.NaN);
             }
         }
 
@@ -345,13 +364,27 @@ namespace EpiSolve
                                              .ToArray();
 
             double[] bestFitnessData = _bestFitnessPerGeneration.ToArray();
+            double[] averageFitnessData = _averageFitnessPerGeneration.ToArray();
+            double[] worstFitnessData = _worstFitnessPerGeneration.ToArray();
 
 
             // Přidání křivky nejlepší fitness
             var bestFitnessLine = plt.Add.Scatter(generations, bestFitnessData);
             bestFitnessLine.Label = "Best Fitness";
-            bestFitnessLine.Color = ScottPlot.Colors.Blue;
+            bestFitnessLine.Color = ScottPlot.Colors.Green;
             bestFitnessLine.LineWidth = 2;
+
+            // Přidání křivky average fitness
+            var averageFitnessLine = plt.Add.Scatter(generations, averageFitnessData);
+            averageFitnessLine.Label = "Average Fitness";
+            averageFitnessLine.Color = ScottPlot.Colors.Orange;
+            averageFitnessLine.LineWidth = 2;
+
+            // Přidání křivky nejhorší fitness
+            var worstFitnessLine = plt.Add.Scatter(generations, worstFitnessData);
+            worstFitnessLine.Label = "Worst Fitness";
+            worstFitnessLine.Color = ScottPlot.Colors.Red;
+            worstFitnessLine.LineWidth = 2;
 
             // Nastavení popisků os a titulku
             plt.Title("Evolution of Fitness Over Generations");
@@ -365,7 +398,7 @@ namespace EpiSolve
             plt.Legend.Location = ScottPlot.Alignment.UpperRight;
 
             // Uložení grafu jako obrázek
-            string filePath = "evolution_graph.png";
+            string filePath = "../../../../../plots/fitness_graph.png";
             try
             {
                 plt.Save(filePath, 600, 400);

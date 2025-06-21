@@ -8,7 +8,7 @@ namespace EpiSolve
         {
             // configurable values
             int populationSize = 500;
-            int maxGenerations = 100;
+            int maxGenerations = 30;
             double mutationRate = 0.05;
             double mutationStrength = 0.1;
             double crossoverRate = 1.0;
@@ -27,7 +27,7 @@ namespace EpiSolve
 
                 minRecoveryTime: 10,
                 recoveryRate: 0.8,
-                minImunityTime: 10,
+                minImunityTime: 20,
                 imunityLossRate: 0.8,
                 deathRate: 0.001,
 

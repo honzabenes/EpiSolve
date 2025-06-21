@@ -44,7 +44,7 @@ namespace EpiSolve
             // Penalty
             double penalty = 0.0;
             double penaltyFactor = 1;
-            double nonsensePenalty = 1;
+            double nonsensePenalty = 0.2;
 
 
             if (lockdownStartThreshold < 0.01)
