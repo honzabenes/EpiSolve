@@ -1,5 +1,4 @@
-﻿using ScottPlot.Colormaps;
-using System;
+﻿using System;
 using System.Text.Json;
 
 namespace EpiSolve
@@ -51,7 +50,8 @@ namespace EpiSolve
                     gridHeight: 10, gridWidth: 10, agentsCount: 35, simulationTime: 100,
                     highRiskRate: 0.8, moderateRiskRate: 0.3, minRecoveryTime: 10,
                     recoveryRate: 0.8, minImunityTime: 20, imunityLossRate: 0.5,
-                    deathRate: 0.001, childWeakerImunityFactor: 0.85, elderWeakerImunityFactor: 0.85
+                    deathRate: 0.001, childWeakerImunityFactor: 0.85, elderWeakerImunityFactor: 0.85,
+                    weightTotalDead: 0.8, weightMaxInfected: 0.6, weightLockdown: 0.5, weightTotalInfected: 0.1, weightEpidemyDuration: 0.2
                 )
             };
             defaultConfig.SimulationParameters.InitializeGrid();
@@ -74,7 +74,7 @@ namespace EpiSolve
             var emergencyConfig = new AppConfig
             {
                 EAParameters = new EAParameters(50, 20, 0.1, 0.1, 0.7, 5, 2, 3),
-                SimulationParameters = new SimulationParameters(5, 5, 10, 50, 0.5, 0.1, 5, 0.5, 10, 0.2, 0.01, 0.9, 0.9)
+                SimulationParameters = new SimulationParameters(5, 5, 10, 50, 0.5, 0.1, 5, 0.5, 10, 0.2, 0.01, 0.9, 0.9, 0.8, 0.6, 0.5, 0.1, 0.2)
             };
             emergencyConfig.SimulationParameters.InitializeGrid();
             return emergencyConfig;

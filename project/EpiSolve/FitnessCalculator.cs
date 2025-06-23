@@ -19,10 +19,10 @@ namespace EpiSolve
             double lockdownReductionFactor = strategy.LockdownInfectionReductionFactor;
             double lockdownMovementRestriction = strategy.LockdownMovementRestriction;
 
+
             // simulation parameters
             double agentsCount = simParams.AgentsCount;
             double maxSimulationTime = simParams.SimulationTime;
-
 
 
             // normalize metrics
@@ -33,59 +33,39 @@ namespace EpiSolve
             double normEpidemyDuration = epidemyDuration / maxSimulationTime;
 
 
-            // weights
-            double wTotalDead = 0.6;
-            double wMaxInfected = 0.4;
-            double wLockdown = 0.3;
-            double wTotalInfected = 0.05;
-            double wEpidemyDuration = 0.05;
-
-
             // penalty
             double penalty = 0.0;
-            double penaltyFactor = 1;
-
 
             // Penalizace za příliš striktní redukci infekce
             if (strategy.LockdownInfectionReductionFactor < 0.2)
             {
-                penalty += (0.3 - strategy.LockdownInfectionReductionFactor) * penaltyFactor;
+                penalty += (0.3 - strategy.LockdownInfectionReductionFactor);
             }
             // Penalizace za příliš striktní omezení pohybu
             if (strategy.LockdownMovementRestriction > 0.9)
             {
-                penalty += (strategy.LockdownMovementRestriction - 0.9) * penaltyFactor;
+                penalty += (strategy.LockdownMovementRestriction - 0.9);
             }
 
             // Penalizace za pozdní start lockdownu
             if (strategy.LockdownStartThreshold > 0.3)
             {
-                penalty += (strategy.LockdownStartThreshold - 0.3) * penaltyFactor;
+                penalty += (strategy.LockdownStartThreshold - 0.3);
             }
             // Penalizace za příliš brzké ukončení lockdownu
             if (strategy.LockdownEndThreshold < 0.1)
             {
-                penalty += (0.1 - strategy.LockdownEndThreshold) * penaltyFactor;
+                penalty += (0.1 - strategy.LockdownEndThreshold);
             }
 
 
             double fitness =
-                wMaxInfected * normMaxInfected +
-                wTotalInfected * normTotalInfected +
-                wTotalDead * normTotalDead +
-                wLockdown * normLockdownDuration +
-                wEpidemyDuration * normEpidemyDuration +
+                simParams.WeightMaxInfected * normMaxInfected +
+                simParams.WeightTotalInfected * normTotalInfected +
+                simParams.WeightTotalDead * normTotalDead +
+                simParams.WeightLockdown * normLockdownDuration +
+                simParams.WeightEpidemyDuration * normEpidemyDuration +
                 penalty;
-
-
-            //double fMaxInfected = wMaxInfected * normMaxInfected;
-            //double fTotalInfected = wTotalInfected * normTotalInfected;
-            //double fTotalDead = wTotalDead * normTotalDead;
-            //double fLockdown = wLockdown * normLockdownDuration;
-            //double fEpidemyDuration = wEpidemyDuration * normEpidemyDuration;
-
-            //double[] results = new double[] { fMaxInfected, fTotalInfected, fTotalDead, fLockdown, fEpidemyDuration };
-
 
             return fitness;
         }

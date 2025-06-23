@@ -22,6 +22,11 @@ namespace EpiSolve
         public double DeathRate { get; set; }
         public double ChildWeakerImunityFactor { get; set; }
         public double ElderWeakerImunityFactor { get; set; }
+        public double WeightTotalDead { get; set; }
+        public double WeightMaxInfected { get; set; }
+        public double WeightLockdown { get; set; }
+        public double WeightTotalInfected { get; set; }
+        public double WeightEpidemyDuration { get; set; }
 
 
         public SimulationParameters() { }
@@ -31,7 +36,9 @@ namespace EpiSolve
                                    int minRecoveryTime, double recoveryRate,
                                    int minImunityTime, double imunityLossRate,
                                    double deathRate,
-                                   double childWeakerImunityFactor, double elderWeakerImunityFactor)
+                                   double childWeakerImunityFactor, double elderWeakerImunityFactor,
+                                   double weightTotalDead, double weightMaxInfected, double weightLockdown,
+                                   double weightTotalInfected, double weightEpidemyDuration)
         {
             this.Grid = new GridMap(gridHeight, gridWidth);
             this.GridHeight = gridHeight;
@@ -47,6 +54,11 @@ namespace EpiSolve
             this.DeathRate = deathRate;
             this.ChildWeakerImunityFactor = childWeakerImunityFactor;
             this.ElderWeakerImunityFactor = elderWeakerImunityFactor;
+            this.WeightTotalDead = weightTotalDead;
+            this.WeightMaxInfected = weightMaxInfected;
+            this.WeightLockdown = weightLockdown;
+            this.WeightTotalInfected = weightTotalInfected;
+            this.WeightEpidemyDuration = weightEpidemyDuration;
         }
 
         public void InitializeGrid()
