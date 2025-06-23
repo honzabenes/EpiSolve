@@ -10,8 +10,17 @@ namespace EpiSolve
     }
 
 
+    /// <summary>
+    /// Static class responsible for loading and managing the application configuration from a JSON file.
+    /// Provides default configurations if the file is not found or loading fails.
+    /// </summary>
     static class ConfigLoader
     {
+        /// <summary>
+        /// Loads the application configuration from a specified JSON file.
+        /// If the file is not found, it creates a default configuration and saves it.
+        /// Handles potential errors during file reading or deserialization by providing an emergency default config.
+        /// </summary>
         public static AppConfig LoadConfig(string pathToFile = "config.json")
         {
             try

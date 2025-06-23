@@ -4,6 +4,9 @@ using System.Drawing;
 
 namespace EpiSolve
 {
+    /// <summary>
+    /// Implements the core logic of the Evolutionary Algorithm to find an optimal epidemic control strategy.
+    /// </summary>
     class EA
     {
         public AppConfig Config;
@@ -17,6 +20,10 @@ namespace EpiSolve
         private List<double> _worstFitnessPerGeneration;
         private Random _random;
 
+        /// <summary>
+        /// Represents an individual in the evolutionary algorithm population,
+        /// holding a strategy and its evaluated fitness score.
+        /// </summary>
         class Individual : IComparable<Individual>
         {
             public MeasuresStrategy Strategy;
@@ -45,7 +52,12 @@ namespace EpiSolve
             _random = new Random();
         }
 
-
+        /// <summary>
+        /// Runs the Evolutionary Algorithm to find the best mitigation strategy.
+        /// Initializes the population, runs generations of evaluation, selection, crossover, and mutation.
+        /// Records generation statistics and plots the fitness evolution.
+        /// Simulates the best found strategy for visualization.
+        /// </summary>
         public MeasuresStrategy FindBestStrategy()
         {
             InitializePopulation();
@@ -178,7 +190,11 @@ namespace EpiSolve
             return avgResult;
         }
 
-
+        /// <summary>
+        /// Selects an individual from the population using tournament selection.
+        /// Randomly selects a subset (tournament size) of individuals and returns the best one among them.
+        /// </summary>
+        /// <returns>The best <see cref="Individual"/> found within the random tournament subset.</returns>
         private Individual SelectParentTournament()
         {
             Individual? bestIndividual = null;
@@ -198,6 +214,11 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Performs crossover between two parent strategies to create a child strategy.
+        /// Averages the corresponding parameters from the two parents.
+        /// </summary>
+        /// <returns>A new <see cref="Individual"/> representing the child with the combined strategy.</returns>
         private Individual Crossover(Individual parent1, Individual parent2)
         {
             MeasuresStrategy strategy1 = parent1.Strategy;
@@ -226,6 +247,11 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Mutates the strategy of an individual based on the mutation rate and strength.
+        /// Randomly adjusts the strategy parameters within defined bounds.
+        /// </summary>
+        /// <returns>A new <see cref="Individual"/> with the mutated strategy, or the original individual if no mutation occurred.</returns>
         private Individual Mutate(Individual individual)
         {
             MeasuresStrategy mutatedStrategy = individual.Strategy.Clone();

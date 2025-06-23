@@ -1,6 +1,9 @@
 ﻿
 namespace EpiSolve
 {
+    /// <summary>
+    /// Represents a position (coordinates) on the simulation grid.
+    /// </summary>
     class GridPosition
     {
         public int Y { get; set; }

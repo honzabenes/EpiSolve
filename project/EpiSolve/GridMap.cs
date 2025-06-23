@@ -1,6 +1,10 @@
 ﻿
 namespace EpiSolve
 {
+    /// <summary>
+    /// Represents the 2D grid map for the epidemic simulation.
+    /// Holds the dimensions of the grid and the state of each tile.
+    /// </summary>
     class GridMap
     {
         public int Height { get; set; }

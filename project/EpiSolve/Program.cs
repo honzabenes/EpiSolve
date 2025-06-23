@@ -2,6 +2,10 @@
 
 namespace EpiSolve
 {
+    /// <summary>
+    /// The main entry point for the EpiSolve application.
+    /// Responsible for loading configuration and starting the Evolutionary Algorithm.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -19,11 +23,11 @@ namespace EpiSolve
 
 
             Stopwatch sw = new Stopwatch();
+            
             sw.Start();
-
             ea.FindBestStrategy();
-
             sw.Stop();
+
             Console.WriteLine($"Elapsed Time: {sw.Elapsed.TotalSeconds} s\n");
         }
     }

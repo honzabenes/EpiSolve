@@ -2,6 +2,9 @@
 
 namespace EpiSolve
 {
+    /// <summary>
+    /// Static class for plotting graphs related to the Evolutionary Algorithm's progress.
+    /// </summary>
     static class EAGraphPlotter
     {
         public static void PlotEvolutionGraph(List<double> bestFitnessPerGeneration, 

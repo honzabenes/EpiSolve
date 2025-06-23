@@ -1,6 +1,10 @@
 ﻿
 namespace EpiSolve
 {
+    /// <summary>
+    /// Represents an individual agent (person) in the epidemic simulation.
+    /// Agents have a health status, age, position on the grid, and track their infection/recovery history.
+    /// </summary>
     class Agent
     {
         public SIR Status { get; set; }
@@ -24,6 +28,10 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Gets a list of valid grid positions within a specified movement range from the agent's current position.
+        /// </summary>
+        /// <returns>A list of valid <see cref="GridPosition"/> instances the agent could potentially move to.</returns>
         public List<GridPosition> GetTilesInRange(GridMap grid, int[] movesRanges)
         {
             int newX;
@@ -49,6 +57,10 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Attempts to move the agent to a new random position within a defined range,
+        /// potentially restricted by lockdown measures.
+        /// </summary>
         public void Move(GridMap grid, bool isLockdown, double lockdownMovementRestriction, Random random)
         {
             int[] movesRanges;
@@ -91,7 +103,10 @@ namespace EpiSolve
         }
 
 
-
+        /// <summary>
+        /// Attempts to infect the current susceptible agent based on distance to infected agents
+        /// and various simulation parameters (age, lockdown, risk rates).
+        /// </summary>
         public void TryInfect(Agent[] agents, GridMap grid,
                               int time, bool isLockdown, double highRiskRate, double moderateRiskRate,
                               double childWeakerImunityFactor, double elderWeakerImunityFactor,
@@ -164,7 +179,9 @@ namespace EpiSolve
             }
         }
 
-
+        /// <summary>
+        /// Private helper method to handle status changes (recovery or immunity loss) based on duration and probability.
+        /// </summary>
         private void TryChangeStatus(SIR statusToChangeFrom, int statusChangedTime, int minDurationInStatus, int time, double probabilityOfChangePerStep, Random random)
         {
             if (this.Status != statusToChangeFrom) return;
@@ -204,6 +221,10 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Attempts to change the agent's status from Infected to Dead
+        /// based on death probability and age factors.
+        /// </summary>
         public void TryDie(double deathProbability, double childWeakerImunityFactor, double elderWeakerImunityFactor, Random random)
         {
             if (this.Status != SIR.Infected) return;

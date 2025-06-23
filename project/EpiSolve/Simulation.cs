@@ -1,8 +1,17 @@
 ﻿
 namespace EpiSolve
 {
+    /// <summary>
+    /// Static class responsible for running a single simulation of the epidemic
+    /// based on given parameters and a strategy.
+    /// </summary>
     static class Simulation
     {
+        /// <summary>
+        /// Initializes the agents for the simulation with random positions, ages,
+        /// and exactly one initially infected agent.
+        /// </summary>
+        /// <returns>An array of initialized <see cref="Agent"/> objects.</returns>
         private static Agent[] InitAgents(GridMap grid, int agentsCount, Random random)
         {
             Agent[] agents = new Agent[agentsCount];
@@ -48,11 +57,16 @@ namespace EpiSolve
         }
 
 
+        /// <summary>
+        /// Runs a full epidemic simulation based on specified parameters and a strategy.
+        /// Tracks simulation metrics like infected counts, duration, and lockdown duration.
+        /// Can optionally visualize the simulation grid step-by-step.
+        /// </summary>
+        /// <returns>A <see cref="SimulationResult"/> object containing the simulation metrics.</returns>
         public static SimulationResult Simulate(MeasuresStrategy strategy, SimulationParameters simParams, int seed, bool visualise = false)
         {
             Random random = new Random(seed);
             Agent[] agents = InitAgents(simParams.Grid, simParams.AgentsCount, random);
-            Dictionary<(int, int), List<Agent>> agentsPositions = new Dictionary<(int, int), List<Agent>>();
             
 
             int epidemyDuration = simParams.SimulationTime;
@@ -69,8 +83,6 @@ namespace EpiSolve
             for (int time = 1; time < simParams.SimulationTime + 1; time++)
             {
                 currInfected = 0;
-                agentsPositions.Clear();
-
 
                 foreach (Agent agent in agents)
                 {
@@ -80,15 +92,6 @@ namespace EpiSolve
                     agent.TryDie(simParams.DeathRate, simParams.ChildWeakerImunityFactor,
                                  simParams.ElderWeakerImunityFactor, random);
                     //Console.WriteLine(agent.ToString()); // CONTROL PRINT
-                }
-
-                foreach (Agent agent in agents)
-                {
-                    if (!agentsPositions.ContainsKey((agent.Position.X, agent.Position.Y)))
-                    {
-                        agentsPositions[(agent.Position.X, agent.Position.Y)] = new List<Agent>();
-                    }
-                    agentsPositions[(agent.Position.X, agent.Position.Y)].Add(agent);
                 }
 
                 foreach (Agent agent in agents)
