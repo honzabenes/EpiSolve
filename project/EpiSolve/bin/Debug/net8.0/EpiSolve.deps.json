@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v8.0": {
       "EpiSolve/1.0.0": {
         "dependencies": {
-          "ScottPlot": "5.0.55"
+          "ScottPlot": "5.0.55",
+          "System.Text.Json": "9.0.6"
         },
         "runtime": {
           "EpiSolve.dll": {}
@@ -173,6 +174,42 @@
             "fileVersion": "0.0.0.0"
           }
         }
+      },
+      "System.IO.Pipelines/9.0.6": {
+        "runtime": {
+          "lib/net8.0/System.IO.Pipelines.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
+      },
+      "System.Text.Encodings.Web/9.0.6": {
+        "runtime": {
+          "lib/net8.0/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll": {
+            "rid": "browser",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
+      },
+      "System.Text.Json/9.0.6": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.6",
+          "System.Text.Encodings.Web": "9.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/System.Text.Json.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
       }
     }
   },
@@ -251,6 +288,27 @@
       "sha512": "sha512-wb2kYgU7iy84nQLYZwMeJXixvK++GoIuECjU4ECaUKNuflyRlJKyiRhN1MAHswvlvzuvkrjRWlK0Za6+kYQK7w==",
       "path": "skiasharp.nativeassets.win32/2.88.9",
       "hashPath": "skiasharp.nativeassets.win32.2.88.9.nupkg.sha512"
+    },
+    "System.IO.Pipelines/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0nlr0reXrRmkZNKifKqh2DgGhQgfkT7Qa3gQxIn/JI7/y3WDiTz67M+Sq3vFhUqcG8O5zVrpqHvIHeGPGUBsEw==",
+      "path": "system.io.pipelines/9.0.6",
+      "hashPath": "system.io.pipelines.9.0.6.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uWRgViw2yJAUyGxrzDLCc6fkzE2dZIoXxs8V6YjCujKsJuP0pnpYSlbm2/7tKd0SjBnMtwfDQhLenk3bXonVOA==",
+      "path": "system.text.encodings.web/9.0.6",
+      "hashPath": "system.text.encodings.web.9.0.6.nupkg.sha512"
+    },
+    "System.Text.Json/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h+ZtYTyTnTh5Ju6mHCKb3FPGx4ylJZgm9W7Y2psUnkhQRPMOIxX+TCN0ZgaR/+Yea+93XHWAaMzYTar1/EHIPg==",
+      "path": "system.text.json/9.0.6",
+      "hashPath": "system.text.json.9.0.6.nupkg.sha512"
     }
   }
 }

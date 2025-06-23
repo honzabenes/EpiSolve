@@ -1,0 +1,27 @@
+{
+  "EAParameters": {
+    "PopulationSize": 500,
+    "MaxGenerations": 10,
+    "MutationRate": 0.05,
+    "MutationStrength": 0.1,
+    "CrossoverRate": 0.8,
+    "TournamentSize": 15,
+    "ElitismCount": 10,
+    "NumberOfRunsForAveraging": 20
+  },
+  "SimulationParameters": {
+    "GridHeight": 10,
+    "GridWidth": 10,
+    "AgentsCount": 35,
+    "SimulationTime": 100,
+    "ModerateRiskRate": 0.25,
+    "HighRiskRate": 0.75,
+    "MinRecoveryTime": 10,
+    "RecoveryRate": 0.7,
+    "MinImunityTime": 20,
+    "ImunityLossRate": 0.8,
+    "DeathRate": 0.001,
+    "ChildWeakerImunityFactor": 0.9,
+    "ElderWeakerImunityFactor": 0.75
+  }
+}

@@ -6,6 +6,7 @@ namespace EpiSolve
 {
     class EA
     {
+        public AppConfig Config;
         public EAParameters EAParams;
         public SimulationParameters SimParams;
         public GridMap Grid { get; set; }
@@ -32,13 +33,12 @@ namespace EpiSolve
             }
         }
 
-        public EA(EAParameters eaParams, SimulationParameters simParams)
+        public EA(AppConfig config)
         {
-            EAParams = eaParams;
+            EAParams = config.EAParameters;
+            SimParams = config.SimulationParameters;
 
-            SimParams = simParams;
-
-            _population = new List<Individual>(eaParams.PopulationSize);
+            _population = new List<Individual>(EAParams.PopulationSize);
             _bestFitnessPerGeneration = new List<double>();
             _averageFitnessPerGeneration = new List<double>();
             _worstFitnessPerGeneration = new List<double>();

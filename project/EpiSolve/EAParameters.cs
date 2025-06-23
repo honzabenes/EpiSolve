@@ -12,6 +12,9 @@ namespace EpiSolve
         public int ElitismCount { get; set; }
         public int NumberOfRunsForAveraging { get; set; }
 
+
+        public EAParameters() { }
+
         public EAParameters(int populationSize, int maxGenerations, double mutationRate,
                             double mutationStrength, double crossoverRate, int tournamentSize,
                             int elitismCount, int numberOfRunsForAveraging)

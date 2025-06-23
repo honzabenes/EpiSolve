@@ -1,9 +1,14 @@
-﻿
+﻿using System;
+using System.IO;
+using System.Text.Json;
+
 namespace EpiSolve
 {
     class SimulationParameters
     {
+        [System.Text.Json.Serialization.JsonIgnore]
         public GridMap Grid { get; set; }
+
         public int GridHeight { get; set; }
         public int GridWidth { get; set; }
         public int AgentsCount { get; set; }
@@ -18,6 +23,8 @@ namespace EpiSolve
         public double ChildWeakerImunityFactor { get; set; }
         public double ElderWeakerImunityFactor { get; set; }
 
+
+        public SimulationParameters() { }
 
         public SimulationParameters(int gridHeight, int gridWidth, int agentsCount, int simulationTime,
                                    double highRiskRate, double moderateRiskRate,
@@ -40,6 +47,11 @@ namespace EpiSolve
             this.DeathRate = deathRate;
             this.ChildWeakerImunityFactor = childWeakerImunityFactor;
             this.ElderWeakerImunityFactor = elderWeakerImunityFactor;
+        }
+
+        public void InitializeGrid()
+        {
+            this.Grid = new GridMap(this.GridHeight, this.GridWidth);
         }
     }
 }

@@ -53,6 +53,10 @@
             "ScottPlot": {
               "target": "Package",
               "version": "[5.0.55, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[9.0.6, )"
             }
           },
           "imports": [

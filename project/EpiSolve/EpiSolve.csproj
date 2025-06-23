@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="ScottPlot" Version="5.0.55" />
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

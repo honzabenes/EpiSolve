@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CemLsC5uhB8=",
+  "dgSpecHash": "bfOQn3VTuoY=",
   "success": true,
   "projectFilePath": "C:\\Users\\jenda\\OneDrive\\Dokumenty\\A_Data\\Skola\\Prvak - 2\\Programovani\\zapoctak\\EpiSolve\\project\\EpiSolve\\EpiSolve.csproj",
   "expectedPackageFiles": [
@@ -13,7 +13,10 @@
     "C:\\Users\\jenda\\.nuget\\packages\\skiasharp.harfbuzz\\2.88.9\\skiasharp.harfbuzz.2.88.9.nupkg.sha512",
     "C:\\Users\\jenda\\.nuget\\packages\\skiasharp.nativeassets.linux.nodependencies\\2.88.9\\skiasharp.nativeassets.linux.nodependencies.2.88.9.nupkg.sha512",
     "C:\\Users\\jenda\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.9\\skiasharp.nativeassets.macos.2.88.9.nupkg.sha512",
-    "C:\\Users\\jenda\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.9\\skiasharp.nativeassets.win32.2.88.9.nupkg.sha512"
+    "C:\\Users\\jenda\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.9\\skiasharp.nativeassets.win32.2.88.9.nupkg.sha512",
+    "C:\\Users\\jenda\\.nuget\\packages\\system.io.pipelines\\9.0.6\\system.io.pipelines.9.0.6.nupkg.sha512",
+    "C:\\Users\\jenda\\.nuget\\packages\\system.text.encodings.web\\9.0.6\\system.text.encodings.web.9.0.6.nupkg.sha512",
+    "C:\\Users\\jenda\\.nuget\\packages\\system.text.json\\9.0.6\\system.text.json.9.0.6.nupkg.sha512"
   ],
   "logs": []
 }
