@@ -6,15 +6,7 @@ namespace EpiSolve
 {
     class EA
     {
-        public bool _print = false;
-
-        public int PopulationSize;
-        public int MaxGenerations;
-        public double MutationRate;
-        public double MutationStrength;
-        public double CrossoverRate;
-        public int TournamentSize;
-        public int ElitismCount;
+        public EAParameters EAParams;
         public SimulationParameters SimParams;
         public GridMap Grid { get; set; }
 
@@ -40,27 +32,13 @@ namespace EpiSolve
             }
         }
 
-        public EA(
-            int populationSize,
-            int maxGenerations,
-            double mutationRate,
-            double mutationStrength,
-            double crossoverRate,
-            int tournamentSize,
-            int elitismCount,
-            SimulationParameters simParams)
+        public EA(EAParameters eaParams, SimulationParameters simParams)
         {
-            PopulationSize = populationSize;
-            MaxGenerations = maxGenerations;
-            MutationRate = mutationRate;
-            MutationStrength = mutationStrength;
-            CrossoverRate = crossoverRate;
-            TournamentSize = tournamentSize;
-            ElitismCount = elitismCount;
+            EAParams = eaParams;
 
             SimParams = simParams;
 
-            _population = new List<Individual>(populationSize);
+            _population = new List<Individual>(eaParams.PopulationSize);
             _bestFitnessPerGeneration = new List<double>();
             _averageFitnessPerGeneration = new List<double>();
             _worstFitnessPerGeneration = new List<double>();
@@ -72,11 +50,10 @@ namespace EpiSolve
         {
             InitializePopulation();
 
-            this._print = true;
-
-            for (int i = 0; i < MaxGenerations; i++)
+            for (int i = 0; i < EAParams.MaxGenerations; i++)
             {
-                Console.WriteLine($"Generation: {i + 1}/{MaxGenerations}"); // CONTROL PRINT
+                Console.WriteLine("Evolution in proces...");
+                Console.WriteLine($"Generation: {i + 1}/{EAParams.MaxGenerations}");
 
                 EvaluatePopulation();
                 RecordGenerationStats();
@@ -101,10 +78,10 @@ namespace EpiSolve
 
             Console.WriteLine("Evolution finished.\n");
             Console.WriteLine($"Best found strategy:\n{bestStrategy.ToString()}");
-            Console.WriteLine($"The result:\n{bestResult.ToString()}");
-            Console.WriteLine($"Fitness: {_population[0].FitnessScore}");
+            Console.WriteLine($"Simulation result:\n{bestResult.ToString()}");
+            Console.WriteLine($"Best fitness: {_population[0].FitnessScore}");
 
-            PlotEvolutionGraph();
+            EAGraphPlotter.PlotEvolutionGraph(_bestFitnessPerGeneration, _worstFitnessPerGeneration, _averageFitnessPerGeneration);
 
             return bestStrategy;
         }
@@ -113,22 +90,16 @@ namespace EpiSolve
         private List<Individual> CreateNextGeneration()
         {
             _population.Sort();
-            List<Individual> newPopulation = new List<Individual>(PopulationSize);
+            List<Individual> newPopulation = new List<Individual>(EAParams.PopulationSize);
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    MeasuresStrategy strategy = new MeasuresStrategy(_random);
-            //    newPopulation.Add(new Individual(strategy));
-            //}
-
-            for (int i = 0; i < ElitismCount; i++)
+            for (int i = 0; i < EAParams.ElitismCount; i++)
             {
                 MeasuresStrategy eliteStrategy = _population[i].Strategy.Clone();
                 Individual eliteIndividual = new Individual(eliteStrategy);
                 newPopulation.Add(eliteIndividual);
             }
 
-            while (newPopulation.Count < PopulationSize)
+            while (newPopulation.Count < EAParams.PopulationSize)
             {
                 Individual parent1 = SelectParentTournament();
                 Individual parent2 = SelectParentTournament();
@@ -148,7 +119,7 @@ namespace EpiSolve
         {
             _population.Clear();
 
-            for (int i = 0; i < PopulationSize; i++)
+            for (int i = 0; i < EAParams.PopulationSize; i++)
             {
                 MeasuresStrategy strategy = new MeasuresStrategy(_random);
                 _population.Add(new Individual(strategy));
@@ -158,13 +129,11 @@ namespace EpiSolve
 
         private void EvaluatePopulation()
         {
-            int numberOfRunsPerIndividual = 20;
-
             Parallel.ForEach(_population, individual =>
             {
                 List<SimulationResult> runResults = new List<SimulationResult>();
 
-                for (int i = 0; i < numberOfRunsPerIndividual; i++)
+                for (int i = 0; i < EAParams.NumberOfRunsForAveraging; i++)
                 {
                     int runSeed;
                     lock (_random)
@@ -176,7 +145,6 @@ namespace EpiSolve
 
                 SimulationResult averagedResult = AverageSimulationResults(runResults);
                 individual.FitnessScore = FitnessCalculator.GetFitness(averagedResult, individual.Strategy, SimParams);
-                //Console.WriteLine(individual.FitnessScore);
             });
         }
 
@@ -202,6 +170,7 @@ namespace EpiSolve
                 (int)Math.Round(avgEpidemyDuration),
                 (int)Math.Round(avgLockdownDuration)
             );
+
             // CONTROL PRINT
             //Console.WriteLine($"avg: {avgResult.ToString()}");
             //Console.WriteLine();
@@ -214,9 +183,9 @@ namespace EpiSolve
         {
             Individual? bestIndividual = null;
 
-            for (int i = 0; i < TournamentSize; i++)
+            for (int i = 0; i < EAParams.TournamentSize; i++)
             {
-                int randomIndex = _random.Next(PopulationSize);
+                int randomIndex = _random.Next(EAParams.PopulationSize);
                 Individual candidate = _population[randomIndex];
 
                 if (bestIndividual == null || candidate.FitnessScore < bestIndividual.FitnessScore)
@@ -262,41 +231,41 @@ namespace EpiSolve
             MeasuresStrategy mutatedStrategy = individual.Strategy.Clone();
             bool mutated = false;
 
-            if (_random.NextDouble() < MutationRate)
+            if (_random.NextDouble() < EAParams.MutationRate)
             {
                 mutated = true;
 
                 // LockdownStartThreshold
-                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                double change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
                 mutatedStrategy.LockdownStartThreshold += change;
                 mutatedStrategy.LockdownStartThreshold = Math.Clamp(mutatedStrategy.LockdownStartThreshold, 0.0, 1.0);
 
                 // LockdownEndThreshold
                 double maxPossibleEndThreshold = Math.Max(0.0, mutatedStrategy.LockdownStartThreshold - 0.001);
-                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
                 mutatedStrategy.LockdownEndThreshold += change;
                 mutatedStrategy.LockdownEndThreshold = Math.Clamp(mutatedStrategy.LockdownEndThreshold, 0.0, maxPossibleEndThreshold);
 
             }
 
-            if (_random.NextDouble() < MutationRate)
+            if (_random.NextDouble() < EAParams.MutationRate)
             {
                 mutated = true;
 
                 // LockdownInfectionReductionFactor
-                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
-                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                double change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
+                change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
                 mutatedStrategy.LockdownInfectionReductionFactor += change;
                 mutatedStrategy.LockdownInfectionReductionFactor = Math.Clamp(mutatedStrategy.LockdownInfectionReductionFactor, 0.0, 1.0);
             }
 
-            if (_random.NextDouble() < MutationRate)
+            if (_random.NextDouble() < EAParams.MutationRate)
             {
                 mutated = true;
 
                 // LockdownMovementRestriction
-                double change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
-                change = (_random.NextDouble() * 2.0 - 1.0) * MutationStrength;
+                double change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
+                change = (_random.NextDouble() * 2.0 - 1.0) * EAParams.MutationStrength;
                 mutatedStrategy.LockdownMovementRestriction += change;
                 mutatedStrategy.LockdownMovementRestriction = Math.Clamp(mutatedStrategy.LockdownMovementRestriction, 0.0, 1.0);
             }
@@ -332,9 +301,9 @@ namespace EpiSolve
                 _worstFitnessPerGeneration.Add(_population[_population.Count - 1].FitnessScore);
 
                 double sumFitness = 0;
-                foreach (Individual ind in _population)
+                foreach (Individual individual in _population)
                 {
-                    sumFitness += ind.FitnessScore;
+                    sumFitness += individual.FitnessScore;
                 }
 
                 _averageFitnessPerGeneration.Add(sumFitness / _population.Count);
@@ -344,69 +313,6 @@ namespace EpiSolve
                 _bestFitnessPerGeneration.Add(double.NaN);
                 _worstFitnessPerGeneration.Add(double.NaN);
                 _averageFitnessPerGeneration.Add(double.NaN);
-            }
-        }
-
-
-
-        private void PlotEvolutionGraph()
-        {
-            if (!_bestFitnessPerGeneration.Any())
-            {
-                Console.WriteLine("No data to plot for evolution graph.");
-                return;
-            }
-
-            var plt = new ScottPlot.Plot();
-
-            double[] generations = Enumerable.Range(0, _bestFitnessPerGeneration.Count)
-                                             .Select(i => (double)i)
-                                             .ToArray();
-
-            double[] bestFitnessData = _bestFitnessPerGeneration.ToArray();
-            double[] averageFitnessData = _averageFitnessPerGeneration.ToArray();
-            double[] worstFitnessData = _worstFitnessPerGeneration.ToArray();
-
-
-            // Přidání křivky nejlepší fitness
-            var bestFitnessLine = plt.Add.Scatter(generations, bestFitnessData);
-            bestFitnessLine.Label = "Best Fitness";
-            bestFitnessLine.Color = ScottPlot.Colors.Green;
-            bestFitnessLine.LineWidth = 2;
-
-            // Přidání křivky average fitness
-            var averageFitnessLine = plt.Add.Scatter(generations, averageFitnessData);
-            averageFitnessLine.Label = "Average Fitness";
-            averageFitnessLine.Color = ScottPlot.Colors.Orange;
-            averageFitnessLine.LineWidth = 2;
-
-            // Přidání křivky nejhorší fitness
-            var worstFitnessLine = plt.Add.Scatter(generations, worstFitnessData);
-            worstFitnessLine.Label = "Worst Fitness";
-            worstFitnessLine.Color = ScottPlot.Colors.Red;
-            worstFitnessLine.LineWidth = 2;
-
-            // Nastavení popisků os a titulku
-            plt.Title("Evolution of Fitness Over Generations");
-
-
-            plt.Axes.Bottom.Label.Text = "Generation";
-            plt.Axes.Left.Label.Text = "Fitness Score (Lower is Better)";
-
-            // Povolení legendy
-            plt.Legend.IsVisible = true;
-            plt.Legend.Location = ScottPlot.Alignment.UpperRight;
-
-            // Uložení grafu jako obrázek
-            string filePath = "../../../../../plots/fitness_graph.png";
-            try
-            {
-                plt.Save(filePath, 600, 400);
-                Console.WriteLine($"Evolution graph saved to {System.IO.Path.GetFullPath(filePath)}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving graph: {ex.Message}");
             }
         }
     }

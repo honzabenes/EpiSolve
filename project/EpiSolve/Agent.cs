@@ -208,12 +208,10 @@ namespace EpiSolve
         {
             if (this.Status != SIR.Infected) return;
 
-            double effectiveDeathProbability = deathProbability;
-
             if (this.Age == AgentAge.Child) { deathProbability /= childWeakerImunityFactor; }
             if (this.Age == AgentAge.Elderly) { deathProbability /= elderWeakerImunityFactor; }
 
-            if (random.NextDouble() < effectiveDeathProbability)
+            if (random.NextDouble() < deathProbability)
             {
                 Die();
             }

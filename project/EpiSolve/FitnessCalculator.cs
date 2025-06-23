@@ -41,39 +41,13 @@ namespace EpiSolve
             double wEpidemyDuration = 0.05;
 
 
-            // Penalty
+            // penalty
             double penalty = 0.0;
             double penaltyFactor = 1;
-            double nonsensePenalty = 0.2;
 
-
-            if (lockdownStartThreshold < 0.01)
-            {
-                penalty += nonsensePenalty;
-            }
-
-            if (lockdownEndThreshold < 0.01)
-            {
-                penalty += nonsensePenalty;
-            }
-
-            if (normTotalDead > 0.01)
-            {
-                penalty += nonsensePenalty;
-            }
-
-            if (lockdownMovementRestriction > 0.9)
-            {
-                penalty += nonsensePenalty;
-            }
-
-            if (strategy.LockdownInfectionReductionFactor < 0.2)
-            {
-                penalty += nonsensePenalty;
-            }
 
             // Penalizace za příliš striktní redukci infekce
-            if (strategy.LockdownInfectionReductionFactor < 0.3)
+            if (strategy.LockdownInfectionReductionFactor < 0.2)
             {
                 penalty += (0.3 - strategy.LockdownInfectionReductionFactor) * penaltyFactor;
             }

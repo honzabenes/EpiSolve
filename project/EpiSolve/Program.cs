@@ -6,14 +6,17 @@ namespace EpiSolve
     {
         static void Main(string[] args)
         {
-            // configurable values
-            int populationSize = 500;
-            int maxGenerations = 30;
-            double mutationRate = 0.05;
-            double mutationStrength = 0.1;
-            double crossoverRate = 1.0;
-            int tournamentSize = 15;
-            int elitismCount = 10;
+            EAParameters eaParams = new EAParameters
+                (
+                populationSize: 500,
+                maxGenerations: 5,
+                mutationRate: 0.05,
+                mutationStrength: 0.1,
+                crossoverRate: 1.0,
+                tournamentSize: 15,
+                elitismCount: 10,
+                numberOfRunsForAveraging: 20
+                );
 
             SimulationParameters simParams = new SimulationParameters
                 (
@@ -35,17 +38,7 @@ namespace EpiSolve
                 elderWeakerImunityFactor: 0.85
                 );
 
-            EA ea = new EA
-                (
-                populationSize,
-                maxGenerations,
-                mutationRate,
-                mutationStrength,
-                crossoverRate,
-                tournamentSize,
-                elitismCount,
-                simParams
-                );
+            EA ea = new EA(eaParams, simParams);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -53,7 +46,7 @@ namespace EpiSolve
             ea.FindBestStrategy();
 
             sw.Stop();
-            Console.WriteLine($"Elapsed Time: {sw.Elapsed.TotalSeconds} s");
+            Console.WriteLine($"Elapsed Time: {sw.Elapsed.TotalSeconds} s\n");
         }
     }
 }
