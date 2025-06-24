@@ -71,7 +71,7 @@ Parameters for both the simulation and the Evolutionary Algorithm are loaded fro
 *   Console: Displays generation progress, the best strategy found, and its simulation results.
 *   fitness_graph.png: A PNG image showing the Best, Average, and Worst fitness scores over generations. Lower fitness indicates a better strategy according to the defined fitness function.
 
-## Code Structure (Brief)
+## Code Structure
 
 * Program.cs: Entry point, loads config, starts EA.
 * ConfigLoader.cs: Handles loading/saving config.json.
