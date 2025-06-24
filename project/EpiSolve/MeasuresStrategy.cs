@@ -2,7 +2,7 @@
 
 namespace EpiSolve
 {
-    class MeasuresStrategy
+    public class MeasuresStrategy
     {
         public double LockdownStartThreshold { get; set; }
         public double LockdownEndThreshold { get; set; }

@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace EpiSolve
 {
-    class SimulationParameters
+    public class SimulationParameters
     {
         [System.Text.Json.Serialization.JsonIgnore]
         public GridMap Grid { get; set; }

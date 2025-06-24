@@ -2,7 +2,7 @@
 
 namespace EpiSolve
 {
-    class SimulationResult
+    public class SimulationResult
     {
         public int TotalInfected { get; set; }
         public int MaxInfected { get; set; }

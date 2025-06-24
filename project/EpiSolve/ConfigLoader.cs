@@ -3,10 +3,10 @@ using System.Text.Json;
 
 namespace EpiSolve
 {
-    class AppConfig
+    public class AppConfig
     {
-        public EAParameters EAParameters { get; set; }
-        public SimulationParameters SimulationParameters { get; set; }
+        public EAParameters? EAParameters { get; set; }
+        public SimulationParameters? SimulationParameters { get; set; }
     }
 
 
@@ -27,12 +27,14 @@ namespace EpiSolve
             {
                 if (!File.Exists(pathToFile))
                 {
-                    Console.WriteLine($"Konfigurační soubor '{pathToFile}' nenalezen. Používám výchozí hodnoty nebo vytvářím nový.");
+                    Console.WriteLine($"Configuration file '{pathToFile}' not found. I am creating a new one.");
+                    Thread.Sleep(3000);
+                    
                     return CreateDefaultConfigAndSave(pathToFile);
                 }
 
                 string jsonString = File.ReadAllText(pathToFile);
-                AppConfig config = JsonSerializer.Deserialize<AppConfig>(jsonString);
+                AppConfig? config = JsonSerializer.Deserialize<AppConfig>(jsonString);
 
                 config?.SimulationParameters?.InitializeGrid();
 
@@ -40,8 +42,11 @@ namespace EpiSolve
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Chyba při načítání konfigurace z '{pathToFile}': {ex.Message}");
-                Console.WriteLine("Používám nouzové výchozí hodnoty.");
+                Console.WriteLine($"Error loading configuration from '{pathToFile}'\n" +
+                                  $"{ex.Message}");
+                Console.WriteLine("I am using emergency defaults.");
+                Thread.Sleep(3000);
+
                 return CreateEmergencyDefaultConfig();
             }
         }
@@ -69,11 +74,11 @@ namespace EpiSolve
             {
                 string jsonString = JsonSerializer.Serialize(defaultConfig, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filePath, jsonString);
-                Console.WriteLine($"Výchozí konfigurační soubor vytvořen: '{filePath}'");
+                Console.WriteLine("Default configuration file created: '{ filePath}'");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Chyba při ukládání výchozí konfigurace: {ex.Message}");
+                Console.WriteLine($"Error saving default configuration: {ex.Message}");
             }
             return defaultConfig;
         }
@@ -82,8 +87,8 @@ namespace EpiSolve
         {
             var emergencyConfig = new AppConfig
             {
-                EAParameters = new EAParameters(50, 20, 0.1, 0.1, 0.7, 5, 2, 3),
-                SimulationParameters = new SimulationParameters(5, 5, 10, 50, 0.5, 0.1, 5, 0.5, 10, 0.2, 0.01, 0.9, 0.9, 0.8, 0.6, 0.5, 0.1, 0.2)
+                EAParameters = new EAParameters(200, 10, 0.1, 0.1, 0.7, 5, 2, 3),
+                SimulationParameters = new SimulationParameters(8, 8, 20, 50, 0.5, 0.1, 5, 0.5, 10, 0.2, 0.01, 0.9, 0.9, 0.8, 0.6, 0.5, 0.1, 0.2)
             };
             emergencyConfig.SimulationParameters.InitializeGrid();
             return emergencyConfig;

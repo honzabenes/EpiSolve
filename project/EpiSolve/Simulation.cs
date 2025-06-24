@@ -5,7 +5,7 @@ namespace EpiSolve
     /// Static class responsible for running a single simulation of the epidemic
     /// based on given parameters and a strategy.
     /// </summary>
-    static class Simulation
+    public static class Simulation
     {
         /// <summary>
         /// Initializes the agents for the simulation with random positions, ages,

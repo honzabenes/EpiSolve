@@ -5,7 +5,7 @@ namespace EpiSolve
     /// Represents an individual agent (person) in the epidemic simulation.
     /// Agents have a health status, age, position on the grid, and track their infection/recovery history.
     /// </summary>
-    class Agent
+    public class Agent
     {
         public SIR Status { get; set; }
         public AgentAge Age { get; set; }

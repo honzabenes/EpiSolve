@@ -7,11 +7,10 @@ namespace EpiSolve
     /// <summary>
     /// Implements the core logic of the Evolutionary Algorithm to find an optimal epidemic control strategy.
     /// </summary>
-    class EA
+    public class EA
     {
-        public AppConfig Config;
-        public EAParameters EAParams;
-        public SimulationParameters SimParams;
+        public EAParameters? EAParams;
+        public SimulationParameters? SimParams;
         public GridMap Grid { get; set; }
 
         private List<Individual> _population;
@@ -34,9 +33,9 @@ namespace EpiSolve
                 this.Strategy = strategy;
             }
 
-            public int CompareTo(Individual other)
+            public int CompareTo(Individual? other)
             {
-                return this.FitnessScore.CompareTo(other.FitnessScore);
+                return this.FitnessScore.CompareTo(other?.FitnessScore);
             }
         }
 
@@ -62,7 +61,7 @@ namespace EpiSolve
         {
             InitializePopulation();
 
-            for (int i = 0; i < EAParams.MaxGenerations; i++)
+            for (int i = 0; i < EAParams?.MaxGenerations; i++)
             {
                 Console.WriteLine("Evolution in proces...");
                 Console.WriteLine($"Generation: {i + 1}/{EAParams.MaxGenerations}");

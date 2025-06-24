@@ -15,7 +15,7 @@ namespace EpiSolve
 
             if (config == null)
             {
-                Console.WriteLine("Nepodařilo se načíst konfiguraci, program nemůže pokračovat.");
+                Console.WriteLine("Failed to load configuration, program cannot continue.");
                 return;
             }
 

@@ -1,7 +1,7 @@
 ﻿
 namespace EpiSolve
 {
-    class EAParameters
+    public class EAParameters
     {
         public int PopulationSize { get; set; }
         public int MaxGenerations { get; set; }

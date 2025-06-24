@@ -5,7 +5,7 @@ namespace EpiSolve
     /// Static class responsible for calculating the fitness score of a strategy
     /// based on the results of a simulation and the strategy parameters.
     /// </summary>
-    static class FitnessCalculator
+    public static class FitnessCalculator
     {
         public static double GetFitness(SimulationResult result, MeasuresStrategy strategy, SimulationParameters simParams)
         {

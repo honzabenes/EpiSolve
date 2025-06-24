@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EpiSolve")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+057cd09f1303f636c00aa5a41979585145c591b3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97933dd2364d747c1e02ce9e3b98fffd908809e4")]
 [assembly: System.Reflection.AssemblyProductAttribute("EpiSolve")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EpiSolve")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

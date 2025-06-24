@@ -5,7 +5,7 @@ namespace EpiSolve
     /// <summary>
     /// Static class for plotting graphs related to the Evolutionary Algorithm's progress.
     /// </summary>
-    static class EAGraphPlotter
+    public static class EAGraphPlotter
     {
         public static void PlotEvolutionGraph(List<double> bestFitnessPerGeneration, 
                                               List<double> worstFitnessPerGeneration, 
@@ -58,7 +58,7 @@ namespace EpiSolve
             plt.Legend.Alignment = ScottPlot.Alignment.UpperRight;
 
             // Uložení grafu jako obrázek
-            string filePath = "../../../../../plots/fitness_graph.png";
+            string filePath = "./fitness_graph.png";
             try
             {
                 plt.Save(filePath, 600, 400);
