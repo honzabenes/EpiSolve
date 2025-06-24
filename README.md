@@ -1,5 +1,4 @@
-# EpiSolve: Optimizing epidemic management strategies using the
-evolutionary algorithm
+# EpiSolve: Optimizing epidemic management strategies using the evolutionary algorithm
 
 ## Project Description
 
