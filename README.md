@@ -65,7 +65,7 @@ Parameters for both the simulation and the Evolutionary Algorithm are loaded fro
     // Parameters for the epidemic simulation and fitness function weights
   }
 }
-
+```
 ## Output
 
 *   Console: Displays generation progress, the best strategy found, and its simulation results.
@@ -86,3 +86,4 @@ GridMap.cs, GridPosition.cs, TypeTileState.cs: Grid representation.
 SimulationResult.cs: Stores metrics from a simulation run.
 TypeAgentAge.cs, TypeSIR.cs: Enumerations.
 GraphPlotter.cs: Handles plotting the fitness graph using ScottPlot.
+```
