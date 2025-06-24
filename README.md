@@ -73,17 +73,15 @@ Parameters for both the simulation and the Evolutionary Algorithm are loaded fro
 
 ## Code Structure (Brief)
 
-```text
-Program.cs: Entry point, loads config, starts EA.
-ConfigLoader.cs: Handles loading/saving config.json.
-EAParameters.cs, SimulationParameters.cs: Data classes for config parameters.
-EvolutionaryAlgorithm.cs: Core EA logic (population, selection, crossover, mutation, evaluation, stats). Contains the Individual class.
-Simulation.cs: Runs a single epidemic simulation.
-Agent.cs: Defines agent behavior (movement, infection, recovery, death).
-MeasuresStrategy.cs: Defines the structure of a mitigation strategy.
-FitnessCalculator.cs: Calculates the fitness score of a strategy based on simulation results.
-GridMap.cs, GridPosition.cs, TypeTileState.cs: Grid representation.
-SimulationResult.cs: Stores metrics from a simulation run.
-TypeAgentAge.cs, TypeSIR.cs: Enumerations.
-GraphPlotter.cs: Handles plotting the fitness graph using ScottPlot.
-```
+* Program.cs: Entry point, loads config, starts EA.
+* ConfigLoader.cs: Handles loading/saving config.json.
+* EAParameters.cs, SimulationParameters.cs: Data classes for config parameters.
+* EvolutionaryAlgorithm.cs: Core EA logic (population, selection, crossover, mutation, evaluation, stats). Contains the Individual class.
+* Simulation.cs: Runs a single epidemic simulation.
+* Agent.cs: Defines agent behavior (movement, infection, recovery, death).
+* MeasuresStrategy.cs: Defines the structure of a mitigation strategy.
+* FitnessCalculator.cs: Calculates the fitness score of a strategy based on simulation results.
+* GridMap.cs, GridPosition.cs, TypeTileState.cs: Grid representation.
+* SimulationResult.cs: Stores metrics from a simulation run.
+* TypeAgentAge.cs, TypeSIR.cs: Enumerations.
+* GraphPlotter.cs: Handles plotting the fitness graph using ScottPlot.
