@@ -12,4 +12,10 @@
     <PackageReference Include="System.Text.Json" Version="9.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

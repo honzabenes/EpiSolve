@@ -128,3 +128,4 @@ C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\E
 C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\EpiSolve\project\EpiSolve.Tests\obj\Debug\net8.0\EpiSolve.Tests.pdb
 C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\EpiSolve\project\EpiSolve.Tests\obj\Debug\net8.0\EpiSolve.Tests.genruntimeconfig.cache
 C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\EpiSolve\project\EpiSolve.Tests\obj\Debug\net8.0\ref\EpiSolve.Tests.dll
+C:\Users\jenda\OneDrive\Dokumenty\A_Data\Skola\Prvak - 2\Programovani\zapoctak\EpiSolve\project\EpiSolve.Tests\bin\Debug\net8.0\config.json
